@@ -96,6 +96,10 @@ function stuffToHappenLater (availableMines) {
 
 document.getElementById("submit-button").addEventListener("click", function(e){
 	e.preventDefault();
+
+	sortingMines = [];
+	recursionCount = 0;
+
 	document.getElementById("result").innerHTML = "";
 	var what = document.getElementById("what").value;
 	var howMany = document.getElementById("how-many").value;
