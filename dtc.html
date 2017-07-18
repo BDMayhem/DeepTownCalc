@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Deep Town Info</title>
+</head>
+<body>
+
+	<h1>Deep Town Info</h1>
+	<p>Right now, all this can do is take what you want to build, and it will tell you where you can mine the materials for it.  It's very limited.</p>
+	<p>If you want to contribute, <a href="https://www.github.com/bdmayhem/DeepTownCalc">check out the repo</a>.</p>
+
+	<form>
+		<select id="what" placeholder="What do you want to build?">
+			
+		</select>
+		<input type="number" id="how-many" placeholder="How many do you want?" value="100">
+		<input type="number" id="mines" placeholder="How many mines do you have?" value="10">
+		<button id="submit-button">Submit</button>
+	</form>
+
+	<div id="result">
+	</div>
+
+<script type="text/javascript" src="materials.js"></script>
+<script type="text/javascript" src="mines.js"></script>
+<script type="text/javascript" src="dtc.js"></script>
+</body>
+</html>
