@@ -1,5 +1,12 @@
 var sortingMines = [];
-var recursionCount = 0;
+const otherSources = [
+	"chemicalMining",
+	"oilPumping",
+	"waterCollection",
+	"shop",
+	"hydrogen"
+];
+var otherStuff = [];
 
 //set up select options
 var select = document.getElementById("what");
@@ -9,6 +16,7 @@ materials.forEach(function(e){
 	el.textContent = name;
 	el.value = name;
 	select.appendChild(el);
+	el.selected = "copperBar";
 });
 
 function makeThese(stuff, quant, availableMines, callback){
@@ -22,22 +30,7 @@ function makeThese(stuff, quant, availableMines, callback){
 		quant = Math.ceil(quant / material.batch);
 	};
 
-	if (Array.isArray(material.toMake)){
-		material.toMake.forEach(function(e){
-
-			var q = e.quantity * quant;
-			console.log("We need (from array) " + q, e.thing);
-
-			makeThese(e.thing, q, availableMines);
-		});
-	} else if (material.hasOwnProperty("toMake")){
-
-		var q = material.toMake.quantity * quant;
-		console.log("We need " + q, material.toMake.thing);
-
-		makeThese(material.toMake.thing, q, availableMines);
-	};
-
+	//deal with mined stuff
 	if (material.source === "mining"){
 		var toMine = material.name;
 		console.log("We need to mine " + toMine);
@@ -69,13 +62,66 @@ function makeThese(stuff, quant, availableMines, callback){
 			}
 		});
 	};
+
+	//deal with non-mined stuff
+	if (otherSources.includes(material.source)){
+		var batchQuant;
+		if (material.batch){
+			batchQuant = material.batch * quant;
+		} else {
+			batchQuant = quant;
+		};
+
+		var addingOther = {};
+		addingOther.stuff = stuff;
+		addingOther.quantity = batchQuant;
+
+		console.log("We also need", batchQuant, stuff, "from", material.source);
+
+		if (otherStuff.length === 0){
+			otherStuff.push(addingOther);
+		} else {
+			var matchCounter = 0;
+			for (var i = otherStuff.length - 1; i >= 0; i--){
+				if (otherStuff[i].stuff === material.name){
+					console.log("match", otherStuff[i].stuff, material.name);
+					otherStuff[i].quantity = otherStuff[i].quantity + batchQuant;
+					break;
+				} else {
+					matchCounter++;
+					console.log(matchCounter, otherStuff.length)
+					if (matchCounter === otherStuff.length){
+						otherStuff.push(addingOther);
+					}
+				}
+			}
+		};
+		console.log(otherStuff)
+	};
+
+	if (Array.isArray(material.toMake)){
+		material.toMake.forEach(function(e){
+
+			var q = e.quantity * quant;
+			console.log("We need (from array) " + q, e.thing);
+
+			makeThese(e.thing, q, availableMines);
+		});
+	} else if (material.hasOwnProperty("toMake")){
+
+		var q = material.toMake.quantity * quant;
+		console.log("We need " + q, material.toMake.thing);
+
+		makeThese(material.toMake.thing, q, availableMines);
+	};
+
 	recursionCount--;
 	if (recursionCount === 0){
 		callback(availableMines);
 	}
 };
 
-function stuffToHappenLater (availableMines) {
+function displayResults (availableMines) {
 	console.log("sort the mines")
 	sortingMines.sort(function(a, b){
 		return b.howMuch - a.howMuch;
@@ -104,5 +150,5 @@ document.getElementById("submit-button").addEventListener("click", function(e){
 	var what = document.getElementById("what").value;
 	var howMany = document.getElementById("how-many").value;
 	var howManyMines = document.getElementById("mines").value;
-	makeThese(what, howMany, howManyMines, stuffToHappenLater);
+	makeThese(what, howMany, howManyMines, displayResults);
 });
