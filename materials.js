@@ -36,6 +36,12 @@ var materials  = [
 		name: "diamond",
 		source: "mining"
 	}, {
+		name: "sapphire",
+		source: "mining"
+	}, {
+		name: "amethyst",
+		source: "mining"
+	}, {
 		name: "copperBar",
 		source: "smelting",
 		time: "10",
@@ -355,6 +361,296 @@ var materials  = [
 			}, {
 				thing: "glass",
 				quantity: "50"
+			}
+		]
+	}, {
+		name: "silicon",
+		source: "chemicalMining",
+		time: "600",
+		batch: "5",
+		value: "100"
+	}, {
+		name: "sulfur",
+		source: "chemicalMining",
+		time: "600",
+		batch: "5",
+		value: "100"
+	}, {
+		name: "sodium",
+		source: "chemicalMining",
+		time: "600",
+		batch: "5",
+		value: "100"
+	}, {
+		name: "oil",
+		source: "oilPumping",
+		value: "21"
+	}, {
+		name: "water",
+		source: "waterCollection",
+		value: "5"
+	}, {
+		name: "wood",
+		source: "greenhouse",
+		time: "1800",
+		batch: "10",
+		value: "193",
+		toMake: [
+			{
+				thing: "treeSeed",
+				quantity: "1"
+			}, {
+				thing: "water",
+				quantity: "10"
+			}
+		]
+	}, {
+		name: "liana",
+		source: "greenhouse",
+		time: "1800",
+		toMake: [
+			{
+				thing: "lianaSeed",
+				quantity: "1"
+			}, {
+				thing: "water",
+				quantity: "20"
+			}
+		]
+	}, {
+		name: "grape",
+		source: "greenhouse",
+		time: "1800",
+		batch: "2",
+		toMake: [
+			{
+				thing: "grapeSeed",
+				quantity: "1"
+			}, {
+				thing: "water",
+				quantity: "15"
+			}
+		]
+	}, {
+		name: "treeSeed",
+		source: "shop",
+		value: "20"
+	}, {
+		name: "lianaSeed",
+		source: "shop",
+		value: "1000"
+	}, {
+		name: "grapeSeed",
+		source: "shop",
+		value: "1200"
+	}, {
+		name: "cleanWater",
+		source: "chemistry",
+		time: "600",
+		value: "1200",
+		toMake: [
+			{
+				thing: "water",
+				quantity: "1"
+			}, {
+				thing: "flask",
+				quantity: "1"
+			}
+		]
+	}, {
+		name: "rubber",
+		source: "chemistry",
+		time: "900",
+		value: "4000",
+		batch: "2",
+		toMake: [
+			{
+				thing: "liana",
+				quantity: "1"
+			}
+		]
+	}, {
+		name: "sulfuricAcid",
+		source: "chemistry",
+		time: "1800",
+		value: "3500",
+		toMake: [
+			{
+				thing: "cleanWater",
+				quantity: "1"
+			}, {
+				thing: "sulfur",
+				quantity: "2"
+			}
+		]
+	}, {
+		name: "ethanol",
+		source: "chemistry",
+		time: "1800",
+		value: "4200",
+		toMake: [
+			{
+				thing: "aluminumBottle",
+				quantity: "1"
+			}, {
+				thing: "grape",
+				quantity: "2"
+			}
+		]
+	}, {
+		name: "refinedOil",
+		source: "chemistry",
+		time: "1800",
+		value: "16500",
+		toMake: [
+			{
+				thing: "flask",
+				quantity: "1"
+			}, {
+				thing: "hydrogen",
+				quantity: "10"
+			}, {
+				thing: "oil",
+				quantity: "10"
+			}
+		]
+	}, {
+		name: "plastic",
+		source: "chemistry",
+		time: "1800",
+		value: "220000",
+		toMake: [
+			{
+				thing: "refinedOil",
+				quantity: "1"
+			}, {
+				thing: "coal",
+				quantity: "1000"
+			}, {
+				thing: "greenLaser",
+				quantity: "200"
+			}
+		]
+	}, {
+		name: "hydrogen",
+		source: "chemistry",
+		time: "900",
+		value: "400",
+		batch: "2",
+		byproduct: "oxygen",
+		toMake: [
+			{
+				thing: "cleanWater",
+				quantity: "1"
+			}
+		]
+	}, {
+		name: "oxygen",
+		source: "hydrogen",
+		value: "800"
+	}, {
+		name: "polishedAmber",
+		source: "jewelCrafting",
+		time: "30",
+		value: "70",
+		toMake: [
+			{
+				thing: "amber",
+				quantity: "5"
+			}
+		]
+	}, {
+		name: "polishedEmerald",
+		source: "jewelCrafting",
+		time: "30",
+		value: "160",
+		toMake: [
+			{
+				thing: "emerald",
+				quantity: "5"
+			}
+		]
+	}, {
+		name: "amberBracelet",
+		source: "jewelCrafting",
+		time: "120",
+		value: "280",
+		toMake: [
+			{
+				thing: "polishedAmber",
+				quantity: "1"
+			}, {
+				thing: "silverBar",
+				quantity: "1"
+			}
+		]
+	}, {
+		name: "emeraldRing",
+		source: "jewelCrafting",
+		time: "300",
+		value: "450",
+		toMake: [
+			{
+				thing: "polishedEmerald",
+				quantity: "1"
+			}, {
+				thing: "goldBar",
+				quantity: "1"
+			}
+		]
+	}, {
+		name: "polishedTopaz",
+		source: "jewelCrafting",
+		time: "60",
+		value: "70",
+		toMake: [
+			{
+				thing: "topaz",
+				quantity: "5"
+			}
+		]
+	}, {
+		name: "polishedRuby",
+		source: "jewelCrafting",
+		time: "60",
+		value: "75",
+		toMake: [
+			{
+				thing: "ruby",
+				quantity: "5"
+			}
+		]
+	}, {
+		name: "polishedDiamond",
+		source: "jewelCrafting",
+		time: "60",
+		value: "90",
+		toMake: [
+			{
+				thing: "diamond",
+				quantity: "5"
+			}
+		]
+	}, {
+		name: "polishedSapphire",
+		source: "jewelCrafting",
+		time: "60",
+		value: "80",
+		toMake: [
+			{
+				thing: "sapphire",
+				quantity: "5"
+			}
+		]
+	}, {
+		name: "polishedAmethyst",
+		source: "jewelCrafting",
+		time: "60",
+		value: "90",
+		toMake: [
+			{
+				thing: "amethyst",
+				quantity: "5"
 			}
 		]
 	}

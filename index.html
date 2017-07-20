@@ -2,23 +2,27 @@
 <html>
 <head>
 	<title>Deep Town Calc</title>
+	<link rel="stylesheet" type="text/css" href="css.css">
 </head>
 <body>
 
 	<h1>Deep Town Calc</h1>
-	<p>Right now, all this can do is take what you want to build, and it will tell you where you can mine the materials for it.  It's very limited.</p>
+	<p>Right now, it's very limited.  You enter what you want to make, how much you want, and how many mines you have.  It will tell you where to place your mines, as well as how many of each material (and, if applicable, how long) it will require.</p>
+	<p>In future updates, I hope to make the mine decider smarter, allow multiple goods, and perhaps let you enter in how many of each material you already have.  I might even add some styling someday.</p>
+	<p>I'm not sure there will ever be a total time calculator, because mining rates change based on whether you're logged in.  </p>
 	<p>If you want to contribute, <a href="https://www.github.com/bdmayhem/DeepTownCalc">check out the repo</a>.</p>
 
 	<form>
-		<select id="what" placeholder="What do you want to build?">
-			
-		</select>
-		<input type="number" id="how-many" placeholder="How many do you want?">
-		<input type="number" id="mines" placeholder="How many mines do you have?">
+		<label>What do you want to make?<select id="what" placeholder="What do you want to build?"></select></label><br>
+		<label>How many do you want<input type="number" id="how-many" value="100"></label><br>
+		<!-- <input type="hidden" id="how-many" value="35"> -->
+		<label>How many mines do you have?<input type="number" id="mines" value="10"></label>
 		<button id="submit-button">Submit</button>
 	</form>
 
-	<div id="result">
+	<div class="row">
+		<div id="result">What you're going to mine</div>
+		<div id="needs">Everything you need</div>
 	</div>
 
 <script type="text/javascript" src="materials.js"></script>
