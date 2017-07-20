@@ -367,19 +367,19 @@ var materials  = [
 		name: "silicon",
 		source: "chemicalMining",
 		time: "600",
-		batch: "10",
+		batch: "5",
 		value: "100"
 	}, {
 		name: "sulfur",
 		source: "chemicalMining",
 		time: "600",
-		batch: "10",
+		batch: "5",
 		value: "100"
 	}, {
 		name: "sodium",
 		source: "chemicalMining",
 		time: "600",
-		batch: "10",
+		batch: "5",
 		value: "100"
 	}, {
 		name: "oil",
