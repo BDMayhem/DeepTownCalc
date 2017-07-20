@@ -20,40 +20,7 @@ function makeThese(stuff, quant, availableMines, callback){
 		return e.name === stuff;
 	})[0];
 
-	//deal with mined stuff
-	if (material.source === "mining"){
-		var toMine = material.name;
-		console.log("We need to mine " + toMine);
-
-		mines.forEach(function(e){
-			//check if e has been added to sortingMines
-			Array.prototype.contains = function(obj){
-				var i = this.length;
-				while (i--) {
-					if (sortingMines[i] === obj) {
-						return true;
-					};
-				};
-				return false;
-			};
-
-			if (sortingMines.contains(e)) {
-			//if so, check if it has the current toMine
-				if (e.hasOwnProperty(toMine)){
-				//if so, add howMuch values
-					e.howMuch = parseFloat(e.howMuch) + parseFloat(e[toMine]);
-					e.what = e.what, toMine;
-				};
-			//if not, push to sortingMines
-			} else if (e.hasOwnProperty(toMine)) {
-				e.howMuch = e[toMine];
-				// e.what = toMine;
-				sortingMines.push(e);
-			}
-		});
-	};
-
-	//create array of all needs
+	//build array of all needs
 	var addingNeeds = {};
 	addingNeeds.stuff = stuff;
 	addingNeeds.quantity = quant;
@@ -86,6 +53,7 @@ function makeThese(stuff, quant, availableMines, callback){
 		}
 	};
 
+	//recurse if necessary
 	var q;
 	if (Array.isArray(material.toMake)){
 		material.toMake.forEach(function(e){
@@ -108,6 +76,43 @@ function makeThese(stuff, quant, availableMines, callback){
 		callback(availableMines);
 	}
 };
+
+function findMines (availableMines) {
+	needsList.forEach(function(miningNeed){
+		console.log("I need to mine this stuff: ", miningNeed.stuff)
+		if (miningNeed.source === "mining"){
+			var toMine = miningNeed.stuff;
+			mines.forEach(function(mine){
+				//check if mine has been added to sortingMines
+				Array.prototype.contains = function(obj){
+					var i = this.length;
+					while (i--) {
+						if (sortingMines[i] === obj) {
+							return true;
+						};
+					};
+					return false;
+				};
+
+				if (sortingMines.contains(mine)) {
+				//if so, check if it has the current toMine
+					if (mine.hasOwnProperty(toMine)){
+					//if so, add howMuch values
+						mine.howMuch = parseFloat(mine.howMuch) + parseFloat(mine[toMine]);
+						// mine.what = mine.what, toMine;
+					};
+				//if not, push to sortingMines
+				} else if (mine.hasOwnProperty(toMine)) {
+					mine.howMuch = mine[toMine];
+					// mine.what = toMine;
+					sortingMines.push(mine);
+				}
+			});
+		};
+	});
+	displayResults(availableMines);
+};
+
 
 function displayResults (availableMines) {
 	if (sortingMines.length === 0){
@@ -181,5 +186,5 @@ document.getElementById("submit-button").addEventListener("click", function(e){
 	var what = document.getElementById("what").value;
 	var howMany = document.getElementById("how-many").value;
 	var howManyMines = document.getElementById("mines").value;
-	makeThese(what, howMany, howManyMines, displayResults);
+	makeThese(what, howMany, howManyMines, findMines);
 });
