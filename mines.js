@@ -59,8 +59,8 @@ var mines = [
 		copper: "100"
 	}, {
 		area: "14",
-		coal: "70",
-		copper: "30"
+		copper: "70",
+		iron: "30"
 	}, {
 		area: "15",
 		copper: "58",
