@@ -13,7 +13,7 @@ materials.forEach(function(e){
 	select.appendChild(el);
 });
 
-function makeThese(stuff, quant, availableMines, callback){
+function makeThese(stuff, quant, availableMines, maxArea){
 	recursionCount++;
 
 	var material = materials.filter(function(e){
@@ -33,15 +33,12 @@ function makeThese(stuff, quant, availableMines, callback){
 		};
 	};
 
-	console.log("We also need", quant, stuff, "from", material.source);
-
 	if (needsList.length === 0){
 		needsList.push(addingNeeds);
 	} else {
 		var matchCounter = 0;
 		for (var i = needsList.length - 1; i >= 0; i--){
 			if (needsList[i].stuff === material.name){
-				console.log("match", needsList[i].stuff, material.name);
 				needsList[i].quantity = needsList[i].quantity + quant;
 				break;
 			} else {
@@ -55,58 +52,65 @@ function makeThese(stuff, quant, availableMines, callback){
 
 	//recurse if necessary
 	var q;
-	if (Array.isArray(material.toMake)){
-		material.toMake.forEach(function(e){
+	if (material.hasOwnProperty("toMake")){
+		//make sure we're working with whole batches
+		if (material.hasOwnProperty("batch")){
+			material.toMake.forEach(function(e){
+				if (quant % material.batch === 0){
+					q = quant * e.quantity / material.batch;
+				} else {
+					var wholeBatches = Math.floor(quant / material.batch);
+					q = ((wholeBatches + 1) * e.quantity);
+				};
 
-			q = e.quantity * quant;
-			console.log("We need (from array) " + q, e.thing);
+				makeThese(e.thing, q, availableMines, maxArea);
 
-			makeThese(e.thing, q, availableMines);
-		});
-	} else if (material.hasOwnProperty("toMake")){
-
-		q = material.toMake.quantity * quant;
-		console.log("We need " + q, material.toMake.thing);
-
-		makeThese(material.toMake.thing, q, availableMines);
+			});
+		} else {
+			material.toMake.forEach(function(e){
+				q = e.quantity * quant;
+				makeThese(e.thing, q, availableMines, maxArea);
+			});
+		}
 	};
 
 	recursionCount--;
 	if (recursionCount === 0){
-		callback(availableMines);
+		findMines(maxArea, availableMines);
 	}
 };
 
-function findMines (availableMines) {
+function findMines (maxArea, availableMines) {
 	needsList.forEach(function(miningNeed){
-		console.log("I need to mine this stuff: ", miningNeed.stuff)
 		if (miningNeed.source === "mining"){
 			var toMine = miningNeed.stuff;
 			mines.forEach(function(mine){
-				//check if mine has been added to sortingMines
-				Array.prototype.contains = function(obj){
-					var i = this.length;
-					while (i--) {
-						if (sortingMines[i] === obj) {
-							return true;
+				if (maxArea - mine.area >= 0){
+					//check if mine has been added to sortingMines
+					Array.prototype.contains = function(obj){
+						var i = this.length;
+						while (i--) {
+							if (sortingMines[i] === obj) {
+								return true;
+							};
 						};
+						return false;
 					};
-					return false;
-				};
 
-				if (sortingMines.contains(mine)) {
-				//if so, check if it has the current toMine
-					if (mine.hasOwnProperty(toMine)){
-					//if so, add howMuch values
-						mine.howMuch = parseFloat(mine.howMuch) + parseFloat(mine[toMine]);
-						// mine.what = mine.what, toMine;
+					if (sortingMines.contains(mine)) {
+					//if so, check if it has the current toMine
+						if (mine.hasOwnProperty(toMine)){
+						//if so, add howMuch values
+							mine.howMuch = parseFloat(mine.howMuch) + parseFloat(mine[toMine]);
+							// mine.what = mine.what, toMine;
+						};
+					//if not, push to sortingMines
+					} else if (mine.hasOwnProperty(toMine)) {
+						mine.howMuch = mine[toMine];
+						// mine.what = toMine;
+						sortingMines.push(mine);
 					};
-				//if not, push to sortingMines
-				} else if (mine.hasOwnProperty(toMine)) {
-					mine.howMuch = mine[toMine];
-					// mine.what = toMine;
-					sortingMines.push(mine);
-				}
+				};
 			});
 		};
 	});
@@ -119,7 +123,8 @@ var content;
 
 function displayResults (availableMines) {
 	if (sortingMines.length === 0){
-		document.getElementById("result").insertAdjacentHTML("beforeend", "No regular mines needed for this material");
+		document.getElementById("result").innerHTML = "<p>Mining isn't going to help you with this</p>";
+		document.getElementById("sorted-by-area").innerHTML = "<p>Mining isn't going to help you with this</p>";
 	} else {
 		sortingMines.sort(function(a, b){
 			return b.howMuch - a.howMuch;
@@ -145,6 +150,7 @@ function displayResults (availableMines) {
 		})
 	};
 
+	document.getElementById("needs").innerHTML = "<p>You will also need:</p>";
 	for (var i = 0; i < needsList.length; i++){
 		if (i === 0) {
 		} else {
@@ -155,26 +161,32 @@ function displayResults (availableMines) {
 			var time = [0,0,0,0];
 
 			var ti = needsList[i].time * needsList[i].quantity;
-			if (ti > 86400){
+			if (ti >= 86400){
 				time[0] = Math.floor(ti/86400);
 				ti -= time[0] * 86400;
 			};
-			if (ti > 3600){
+			if (ti >= 3600){
 				time[1] = Math.floor(ti/3600);
 				ti -= time[1] * 3600;
 			};
-			if (ti > 60){
+			if (ti >= 60){
 				time[2] = Math.floor(ti/60);
 				ti -= time[2] * 60;
 			};
 			time[3] = ti;
+
+			time.forEach(function(value, index, time){
+				if (value === 0){
+					time[index] = "00";
+				};
+			});
 
 			var timeStr = "";
 			if (time[0] > 0){
 				timeStr = time[0] + ":" + time[1] + ":" + time[2] + ":" + time[3];
 			} else  if (time[1] > 0){
 				timeStr = time[1] + ":" + time[2] + ":" + time[3];
-			} else if (time[2] > 0){
+			} else {
 				timeStr = time[2] + ":" + time[3];
 			};
 
@@ -193,16 +205,17 @@ document.getElementById("submit-button").addEventListener("click", function(e){
 	needsList = [];
 	recursionCount = 0;
 
-	document.getElementById("needs").innerHTML = "<p>You will also need:</p>";
+	document.getElementById("needs").innerHTML = "";
 	var what = document.getElementById("what").value;
 	var howMany = document.getElementById("how-many").value;
 	var howManyMines = document.getElementById("mines").value;
-	makeThese(what, howMany, howManyMines, findMines);
+	var maxArea = document.getElementById("area").value;
+	makeThese(what, howMany, howManyMines, maxArea);
 });
 
-document.querySelector(".mine-results").addEventListener("click", function(e){
+document.querySelector(".mine-results").addEventListener("click", toggleMines)
+function toggleMines(e){
 	e.preventDefault();
-
 	resultDiv.classList.toggle("hidden");
 	sortedDiv.classList.toggle("hidden");
-});
+};

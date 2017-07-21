@@ -45,38 +45,42 @@ var materials  = [
 		name: "copperBar",
 		source: "smelting",
 		time: "10",
-		toMake: 
-			{
-				thing: "copper",
-				quantity: "5"
-			}
+		toMake: [
+				{
+					thing: "copper",
+					quantity: "5"
+				}
+			]
 	}, {
 		name: "ironBar",
 		source: "smelting",
 		time: "15",
-		toMake: 
+		toMake: [
 			{
 				thing: "iron",
 				quantity: "5"
 			}
+		]
 	}, {
 		name: "glass",
 		source: "smelting",
 		time: "60",
-		toMake: 
+		toMake: [
 			{
 				thing: "silicon",
 				quantity: "2"
 			}
+		]
 	}, {
 		name: "aluminumBar",
 		source: "smelting",
 		time: "15",
-		toMake:
+		toMake: [
 			{
 				thing: "aluminum",
 				quantity: "5"
 			}
+		]
 	}, {
 		name: "steelBar",
 		source: "smelting",
@@ -95,77 +99,84 @@ var materials  = [
 		name: "silverBar",
 		source: "smelting",
 		time: "60",
-		toMake: 
+		toMake: [
 			{
 				thing: "silver",
 				quantity: "5"
 			}
+		]
 	}, {
 		name: "charcoal",
 		source: "smelting",
 		time: "60",
 		batch: "50",
-		toMake: 
+		toMake: [
 			{
 				thing: "wood",
 				quantity: "1"
 			}
+		]
 	}, {
 		name: "goldBar",
 		source: "smelting",
 		time: "60",
-		toMake: 
+		toMake: [
 			{
 				thing: "gold",
 				quantity: "5"
 			}
+		]
 	}, {
 		name: "steelPlate",
 		source: "smelting",
 		time: "120",
-		toMake: 
+		toMake: [
 			{
 				thing: "steelBar",
 				quantity: "5"
 			}
+		]
 	}, {
 		name: "graphite",
 		source: "crafting",
 		time: "5",
 		value: "15",
-		toMake: 
+		toMake: [
 			{
 				thing: "coal",
 				quantity: "5"
 			}
+		]
 	}, {
 		name: "copperNail",
 		source: "crafting",
 		time: "20",
 		batch: "10",
 		value: "10",
-		toMake: 
+		toMake: [
 			{
 				thing: "copperBar",
 				quantity: "1"
 			}
+		]
 	}, {
 		name: "wire",
 		source: "crafting",
 		time: "30",
 		batch: "5",
 		value: "15",
-		toMake: 
+		toMake: [
 			{
 				thing: "copperBar",
 				quantity: "1"
 			}
+		]
 	}, {
 		name: "battery",
 		source: "crafting",
 		time: "20",
 		value: "200",
-		toMake:[
+		toMake: [
 			{
 				thing: "amber",
 				quantity: "1"
@@ -182,7 +193,7 @@ var materials  = [
 		source: "crafting",
 		time: "180",
 		value: "2070",
-		toMake:[
+		toMake: [
 			{
 				thing: "ironBar",
 				quantity: "10"
@@ -199,7 +210,7 @@ var materials  = [
 		source: "crafting",
 		time: "80",
 		value: "760",
-		toMake:[
+		toMake: [
 			{
 				thing: "wire",
 				quantity: "10"
@@ -216,38 +227,41 @@ var materials  = [
 		source: "crafting",
 		time: "60",
 		value: "800",
-		toMake: 
+		toMake: [
 			{
 				thing: "glass",
 				quantity: "1"
 			}
+		]
 	}, {
 		name: "amberCharger",
 		source: "crafting",
 		time: "5",
 		value: "4",
-		toMake: 
+		toMake: [
 			{
 				thing: "amber",
 				quantity: "1"
 			}
+		]
 	}, {
 		name: "aluminumBottle",
 		source: "crafting",
 		time: "30",
 		batch: "2",
 		value: "55",
-		toMake: 
+		toMake: [
 			{
 				thing: "aluminumBar",
 				quantity: "1"
 			}
+		]
 	}, {
 		name: "amberInsulation",
 		source: "crafting",
 		time: "20",
 		value: "125",
-		toMake:[
+		toMake: [
 			{
 				thing: "amber",
 				quantity: "10"
@@ -261,7 +275,7 @@ var materials  = [
 		source: "crafting",
 		time: "200",
 		value: "750",
-		toMake:[
+		toMake: [
 			{
 				thing: "wire",
 				quantity: "1"
@@ -275,7 +289,7 @@ var materials  = [
 		source: "crafting",
 		time: "20",
 		value: "400",
-		toMake:[
+		toMake: [
 			{
 				thing: "polishedEmerald",
 				quantity: "1"
@@ -292,7 +306,7 @@ var materials  = [
 		source: "crafting",
 		time: "30",
 		value: "5000",
-		toMake:[
+		toMake: [
 			{
 				thing: "steelPlate",
 				quantity: "1"
@@ -306,7 +320,7 @@ var materials  = [
 		source: "crafting",
 		time: "30",
 		value: "17000",
-		toMake:[
+		toMake: [
 			{
 				thing: "silicon",
 				quantity: "3"
@@ -323,7 +337,7 @@ var materials  = [
 		source: "crafting",
 		time: "20",
 		value: "27000",
-		toMake:[
+		toMake: [
 			{
 				thing: "rubber",
 				quantity: "3"
@@ -337,7 +351,7 @@ var materials  = [
 		source: "crafting",
 		time: "180",
 		value: "9000",
-		toMake:[
+		toMake: [
 			{
 				thing: "sodium",
 				quantity: "20"
@@ -351,7 +365,7 @@ var materials  = [
 		source: "crafting",
 		time: "60",
 		value: "69000",
-		toMake:[
+		toMake: [
 			{
 				thing: "rubber",
 				quantity: "1"
