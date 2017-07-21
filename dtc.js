@@ -113,6 +113,9 @@ function findMines (availableMines) {
 	displayResults(availableMines);
 };
 
+var resultDiv = document.getElementById("result");
+var sortedDiv = document.getElementById("sorted-by-area");
+var content;
 
 function displayResults (availableMines) {
 	if (sortingMines.length === 0){
@@ -122,15 +125,24 @@ function displayResults (availableMines) {
 			return b.howMuch - a.howMuch;
 		});
 
+		//sort by priority
+		document.getElementById("result").innerHTML = "<p>Click to sort mines by priority</p>";
+		var toRemove = sortingMines.length - availableMines;
+		sortingMines.splice(availableMines, toRemove);
 		sortingMines.forEach(function(e){
-			if (availableMines > 0){
-				console.log("Mine at area " + e.area);
-				var resultDiv = document.getElementById("result");
-				var content = "Mine at Area " + e.area;
-				resultDiv.insertAdjacentHTML("beforeend", content + "<br>");
-				availableMines--;
-			};
+			content = "Mine at Area " + e.area;
+			resultDiv.insertAdjacentHTML("beforeend", content + "<br>");
 		});
+
+		//sort by area
+		document.getElementById("sorted-by-area").innerHTML = "<p>Click to sort mines by area</p>";
+		sortingMines.sort(function(a, b){
+			return a.area - b.area;
+		});
+		sortingMines.forEach(function(e){
+			content = "Mine at Area " + e.area;
+			sortedDiv.insertAdjacentHTML("beforeend", content + "<br>");
+		})
 	};
 
 	for (var i = 0; i < needsList.length; i++){
@@ -181,10 +193,16 @@ document.getElementById("submit-button").addEventListener("click", function(e){
 	needsList = [];
 	recursionCount = 0;
 
-	document.getElementById("result").innerHTML = "<p>Mine your materials here:</p>";
 	document.getElementById("needs").innerHTML = "<p>You will also need:</p>";
 	var what = document.getElementById("what").value;
 	var howMany = document.getElementById("how-many").value;
 	var howManyMines = document.getElementById("mines").value;
 	makeThese(what, howMany, howManyMines, findMines);
+});
+
+document.querySelector(".mine-results").addEventListener("click", function(e){
+	e.preventDefault();
+
+	resultDiv.classList.toggle("hidden");
+	sortedDiv.classList.toggle("hidden");
 });
