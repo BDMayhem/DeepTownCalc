@@ -5,6 +5,16 @@ var noTime = ["mining", "shop", "waterCollection"];
 
 //set up select options
 var select = document.getElementById("what");
+materials.sort(function(a, b){
+	if (a.name > b.name){
+		return 1;
+	};
+	if (a.name < b.name){
+		return -1;
+	};
+	return 0;
+});
+
 materials.forEach(function(e){
 	var name = e.name;
 	var el = document.createElement("option");
