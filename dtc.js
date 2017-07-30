@@ -31,30 +31,19 @@ function makeThese(stuff, quant, availableMines, maxArea){
 	})[0];
 
 	//build array of all needs
-	var addingNeeds = {};
-	addingNeeds.stuff = stuff;
-	addingNeeds.quantity = quant;
-	addingNeeds.source = material.source;
-	if (!noTime.includes(material.source)){
-		if (material.hasOwnProperty("batch")){
-			addingNeeds.time = material.time / material.batch;
-		} else {
-			addingNeeds.time = material.time;
-		};
-	};
-
+	material.quantity = quant;
 	if (needsList.length === 0){
-		needsList.push(addingNeeds);
+		needsList.push(material);
 	} else {
 		var matchCounter = 0;
 		for (var i = needsList.length - 1; i >= 0; i--){
-			if (needsList[i].stuff === material.name){
+			if (needsList[i].name === material.name){
 				needsList[i].quantity = needsList[i].quantity + quant;
 				break;
 			} else {
 				matchCounter++;
 				if (matchCounter === needsList.length){
-					needsList.push(addingNeeds);
+					needsList.push(material);
 				}
 			}
 		}
@@ -68,9 +57,12 @@ function makeThese(stuff, quant, availableMines, maxArea){
 			material.toMake.forEach(function(e){
 				if (quant % material.batch === 0){
 					q = quant * e.quantity / material.batch;
+					console.log("full batch", material.name)
 				} else {
 					var wholeBatches = Math.floor(quant / material.batch);
+					console.log("partial batch", material.name, wholeBatches)
 					q = ((wholeBatches + 1) * e.quantity);
+					console.log(q)
 				};
 
 				makeThese(e.thing, q, availableMines, maxArea);
@@ -93,7 +85,7 @@ function makeThese(stuff, quant, availableMines, maxArea){
 function findMines (maxArea, availableMines) {
 	needsList.forEach(function(miningNeed){
 		if (miningNeed.source === "mining"){
-			var toMine = miningNeed.stuff;
+			var toMine = miningNeed.name;
 			mines.forEach(function(mine){
 				if (maxArea - mine.area >= 0){
 					//check if mine has been added to sortingMines
@@ -140,7 +132,7 @@ function displayResults (availableMines) {
 			return b.howMuch - a.howMuch;
 		});
 
-		//sort by priority
+		//click list to display mines list sorted by priority
 		document.getElementById("result").innerHTML = "<p>Click to sort mines by priority</p>";
 		var toRemove = sortingMines.length - availableMines;
 		sortingMines.splice(availableMines, toRemove);
@@ -149,7 +141,7 @@ function displayResults (availableMines) {
 			resultDiv.insertAdjacentHTML("beforeend", content + "<br>");
 		});
 
-		//sort by area
+		//click list to display mines list sorted by area
 		document.getElementById("sorted-by-area").innerHTML = "<p>Click to sort mines by area</p>";
 		sortingMines.sort(function(a, b){
 			return a.area - b.area;
@@ -160,51 +152,53 @@ function displayResults (availableMines) {
 		})
 	};
 
-	document.getElementById("needs").innerHTML = "<p>You will also need:</p>";
+	document.getElementById("needs").innerHTML = "<p>You will need:</p>";
 	for (var i = 0; i < needsList.length; i++){
-		if (i === 0) {
+		var qu = needsList[i].quantity.toLocaleString("en-us");
+		var st = needsList[i].name;
+		var so = needsList[i].source;
+		var content = qu + " " + st + " via " + so;
+		var time = [0,0,0,0];
+
+		if (needsList[i].hasOwnProperty("batch")){
+			var ti = needsList[i].time * needsList[i].quantity / needsList[i].batch;
 		} else {
-			var qu = needsList[i].quantity.toLocaleString("en-us");
-			var st = needsList[i].stuff;
-			var so = needsList[i].source;
-			var content = qu + " " + st + " via " + so;
-			var time = [0,0,0,0];
-
 			var ti = needsList[i].time * needsList[i].quantity;
-			if (ti >= 86400){
-				time[0] = Math.floor(ti/86400);
-				ti -= time[0] * 86400;
-			};
-			if (ti >= 3600){
-				time[1] = Math.floor(ti/3600);
-				ti -= time[1] * 3600;
-			};
-			if (ti >= 60){
-				time[2] = Math.floor(ti/60);
-				ti -= time[2] * 60;
-			};
-			time[3] = ti;
-
-			time.forEach(function(value, index, time){
-				if (value === 0){
-					time[index] = "00";
-				};
-			});
-
-			var timeStr = "";
-			if (time[0] > 0){
-				timeStr = time[0] + ":" + time[1] + ":" + time[2] + ":" + time[3];
-			} else  if (time[1] > 0){
-				timeStr = time[1] + ":" + time[2] + ":" + time[3];
-			} else {
-				timeStr = time[2] + ":" + time[3];
-			};
-
-			if (needsList[i].time){
-				content += ", which will take " + timeStr;
-			}
-			document.getElementById("needs").insertAdjacentHTML("beforeend", content + "<br>");
 		}
+
+		if (ti >= 86400){
+			time[0] = Math.floor(ti/86400);
+			ti -= time[0] * 86400;
+		};
+		if (ti >= 3600){
+			time[1] = Math.floor(ti/3600);
+			ti -= time[1] * 3600;
+		};
+		if (ti >= 60){
+			time[2] = Math.floor(ti/60);
+			ti -= time[2] * 60;
+		};
+		time[3] = ti;
+
+		time.forEach(function(value, index, time){
+			if (value === 0){
+				time[index] = "00";
+			};
+		});
+
+		var timeStr = "";
+		if (time[0] > 0){
+			timeStr = time[0] + ":" + time[1] + ":" + time[2] + ":" + time[3];
+		} else  if (time[1] > 0){
+			timeStr = time[1] + ":" + time[2] + ":" + time[3];
+		} else {
+			timeStr = time[2] + ":" + time[3];
+		};
+
+		if (needsList[i].time){
+			content += ", which will take " + timeStr;
+		}
+		document.getElementById("needs").insertAdjacentHTML("beforeend", content + "<br>");
 	}
 };
 
