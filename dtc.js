@@ -33,7 +33,7 @@ function makeThese(stuff, quant, availableMines, maxArea){
 	//build array of all needs
 	material.quantity = quant;
 	if (needsList.length === 0){
-		needsList.push(material);
+		needsList.push(Object.assign({}, material));
 	} else {
 		var matchCounter = 0;
 		for (var i = needsList.length - 1; i >= 0; i--){
@@ -43,7 +43,7 @@ function makeThese(stuff, quant, availableMines, maxArea){
 			} else {
 				matchCounter++;
 				if (matchCounter === needsList.length){
-					needsList.push(material);
+					needsList.push(Object.assign({}, material));
 				}
 			}
 		}
@@ -57,12 +57,9 @@ function makeThese(stuff, quant, availableMines, maxArea){
 			material.toMake.forEach(function(e){
 				if (quant % material.batch === 0){
 					q = quant * e.quantity / material.batch;
-					console.log("full batch", material.name)
 				} else {
 					var wholeBatches = Math.floor(quant / material.batch);
-					console.log("partial batch", material.name, wholeBatches)
 					q = ((wholeBatches + 1) * e.quantity);
-					console.log(q)
 				};
 
 				makeThese(e.thing, q, availableMines, maxArea);
@@ -83,70 +80,151 @@ function makeThese(stuff, quant, availableMines, maxArea){
 };
 
 function findMines (maxArea, availableMines) {
+	var minableSum = 0;
+	var needSum = 0;
 	needsList.forEach(function(miningNeed){
+		miningNeed.totalMinable = 0;
 		if (miningNeed.source === "mining"){
+			needSum += parseFloat(miningNeed.quantity);
+	
 			var toMine = miningNeed.name;
 			mines.forEach(function(mine){
-				if (maxArea - mine.area >= 0){
-					//check if mine has been added to sortingMines
-					Array.prototype.contains = function(obj){
-						var i = this.length;
-						while (i--) {
-							if (sortingMines[i] === obj) {
-								return true;
+				if (maxArea - mine.area >= 0 && mine.hasOwnProperty(toMine)){
+					if (sortingMines.length === 0){
+						sortingMines.push(Object.assign({}, mine));
+						sortingMines[sortingMines.length-1].howMuch = mine[toMine];
+
+						miningNeed.totalMinable = parseFloat(miningNeed.totalMinable) + parseFloat(mine[toMine]);
+						minableSum += parseFloat(mine[toMine]);
+
+					} else {
+						var found;
+						searchingMinesLoop:
+						for (var i = 0; i < sortingMines.length; i++){
+							if (sortingMines[i].area === mine.area){
+								found = true;
+								break searchingMinesLoop;
 							};
 						};
-						return false;
-					};
 
-					if (sortingMines.contains(mine)) {
-					//if so, check if it has the current toMine
-						if (mine.hasOwnProperty(toMine)){
-						//if so, add howMuch values
-							mine.howMuch = parseFloat(mine.howMuch) + parseFloat(mine[toMine]);
-							// mine.what = mine.what, toMine;
+						if (found){
+							sortingMines[i].howMuch = parseFloat(sortingMines[i].howMuch) + parseFloat(mine[toMine]);
+							miningNeed.totalMinable = parseFloat(miningNeed.totalMinable) + parseFloat(mine[toMine]);
+							minableSum += parseFloat(mine[toMine]);
+
+						} else {
+							sortingMines.push(Object.assign({}, mine));
+							sortingMines[sortingMines.length-1].howMuch = mine[toMine];
+							miningNeed.totalMinable = parseFloat(miningNeed.totalMinable) + parseFloat(mine[toMine]);
+							minableSum += parseFloat(mine[toMine]);
 						};
-					//if not, push to sortingMines
-					} else if (mine.hasOwnProperty(toMine)) {
-						mine.howMuch = mine[toMine];
-						// mine.what = toMine;
-						sortingMines.push(mine);
 					};
 				};
 			});
 		};
 	});
-	displayResults(availableMines);
+	miningAlgorithm(availableMines, minableSum, needSum);
+};
+
+function miningAlgorithm(availableMines, minableSum, needSum){
+	calculateLoop:
+	for (var j = 0; j < availableMines; j++){
+		var weightedNeedSum = 0;
+		needsList.forEach(function(miningNeed){
+			if (miningNeed.source === "mining"){
+				miningNeed.percentOfTotalMinable = miningNeed.totalMinable / minableSum;
+
+				if (miningNeed.hasOwnProperty("runningSum")){
+					miningNeed.weightedNeed = (parseFloat(miningNeed.quantity) / needSum * availableMines * 100) - parseFloat(miningNeed.runningSum);
+				} else {
+					miningNeed.weightedNeed = (parseFloat(miningNeed.quantity) / needSum * availableMines * 100);
+				};
+
+				if (miningNeed.weightedNeed < 0){
+					miningNeed.weightedNeed = 0;
+				}
+
+				weightedNeedSum += parseFloat(miningNeed.weightedNeed);
+
+			};
+		});
+
+		needsList.forEach(function(miningNeed){
+			if (miningNeed.source === "mining"){
+				miningNeed.percentofWeightedNeed = parseFloat(miningNeed.weightedNeed) / weightedNeedSum;
+				miningNeed.priority = parseFloat(miningNeed.percentofWeightedNeed) / parseFloat(miningNeed.percentOfTotalMinable);
+			} else {
+				miningNeed.priority = 0;	
+			};
+		});
+
+		needsList.sort(function(a, b){
+			return b.priority - a.priority;
+		});
+
+		sortingMines.sort(function(a, b){
+			return b.howMuch - a.howMuch;
+		});
+
+		chooseLoop:
+		for (var k = 0; k < needsList.length; k++){
+			priorityLoop:
+			for (var l = 0; l < sortingMines.length; l++){
+				if (sortingMines[l].hasOwnProperty(needsList[k].name) && sortingMines[l].howMuch > 0){
+					sortingMines[l].order = j;
+					sortingMines[l].howMuch = 0;
+					needsList.forEach(function(miningNeed){
+						if (miningNeed.source === "mining"){
+							if (sortingMines[l].hasOwnProperty(miningNeed.name)){
+								if (miningNeed.hasOwnProperty("runningSum")){
+									miningNeed.runningSum += parseFloat(sortingMines[l][miningNeed.name]);
+								} else {
+									miningNeed.runningSum = parseFloat(sortingMines[l][miningNeed.name]);
+								}
+							};
+						};
+					});
+					break chooseLoop;
+				};
+			};
+		};
+	};
+	var sortedMines = [];
+	sortingMines.forEach(function(e){
+		if(e.hasOwnProperty("order")){
+			sortedMines.push(e);
+		}
+	})	
+
+	displayResults(sortedMines);
 };
 
 var resultDiv = document.getElementById("result");
 var sortedDiv = document.getElementById("sorted-by-area");
 var content;
 
-function displayResults (availableMines) {
-	if (sortingMines.length === 0){
+function displayResults (sortedMines) {
+	if (sortedMines.length === 0){
 		document.getElementById("result").innerHTML = "<p>Mining isn't going to help you with this</p>";
 		document.getElementById("sorted-by-area").innerHTML = "<p>Mining isn't going to help you with this</p>";
 	} else {
-		sortingMines.sort(function(a, b){
-			return b.howMuch - a.howMuch;
+		sortedMines.sort(function(a, b){
+			return a.order - b.order;
 		});
 
 		//click list to display mines list sorted by priority
-		document.getElementById("result").innerHTML = "<p>Click to sort mines by priority</p>";
-		var toRemove = sortingMines.length - availableMines;
-		sortingMines.splice(availableMines, toRemove);
-		sortingMines.forEach(function(e){
+		document.getElementById("result").innerHTML = "<p>Click to sort mines by area</p>";
+		sortedMines.forEach(function(e){
 			content = "Mine at Area " + e.area;
 			resultDiv.insertAdjacentHTML("beforeend", content + "<br>");
 		});
 
 		//click list to display mines list sorted by area
-		document.getElementById("sorted-by-area").innerHTML = "<p>Click to sort mines by area</p>";
-		sortingMines.sort(function(a, b){
+		document.getElementById("sorted-by-area").innerHTML = "<p>Click to sort mines by priority</p>";
+		sortedMines.sort(function(a, b){
 			return a.area - b.area;
 		});
-		sortingMines.forEach(function(e){
+		sortedMines.forEach(function(e){
 			content = "Mine at Area " + e.area;
 			sortedDiv.insertAdjacentHTML("beforeend", content + "<br>");
 		})
