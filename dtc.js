@@ -1,30 +1,40 @@
 var sortingMines = [];
 var needsList = [];
+var itemArray = [];
 var recursionCount = 0;
 var noTime = ["mining", "shop", "waterCollection"];
 
 //set up select options
-var select = document.getElementById("what");
-materials.sort(function(a, b){
-	if (a.name > b.name){
-		return 1;
-	};
-	if (a.name < b.name){
-		return -1;
-	};
-	return 0;
-});
+var select = document.getElementsByClassName("what");
+for (var i = 0; i < select.length; i++){
+	materials.sort(function(a, b){
+		if (a.name > b.name){
+			return 1;
+		}
+		if (a.name < b.name){
+			return -1;
+		}
+		return 0;
+	});
 
-materials.forEach(function(e){
-	var name = e.name;
-	var el = document.createElement("option");
-	el.textContent = name;
-	el.value = name;
-	select.appendChild(el);
-});
+	materials.forEach(function(e){
+		var name = e.name;
+		var el = document.createElement("option");
+		el.textContent = name;
+		el.value = name;
+		select[i].appendChild(el);
+	});
+}
 
-function makeThese(stuff, quant, availableMines, maxArea){
-	recursionCount++;
+function makeInputNeeds(itemArray, availableMines, maxArea){
+	itemArray.forEach(function(e){
+		makeThese(e.name, e.quantity);
+	});
+
+	findMines(maxArea, availableMines);
+}
+
+function makeThese(stuff, quant){
 
 	var material = materials.filter(function(e){
 		return e.name === stuff;
@@ -47,8 +57,7 @@ function makeThese(stuff, quant, availableMines, maxArea){
 				}
 			}
 		}
-	};
-
+	}
 	//recurse if necessary
 	var q;
 	if (material.hasOwnProperty("toMake")){
@@ -60,24 +69,19 @@ function makeThese(stuff, quant, availableMines, maxArea){
 				} else {
 					var wholeBatches = Math.floor(quant / material.batch);
 					q = ((wholeBatches + 1) * e.quantity);
-				};
+				}
 
-				makeThese(e.thing, q, availableMines, maxArea);
+				makeThese(e.thing, q);
 
 			});
 		} else {
 			material.toMake.forEach(function(e){
 				q = e.quantity * quant;
-				makeThese(e.thing, q, availableMines, maxArea);
+				makeThese(e.thing, q);
 			});
 		}
-	};
-
-	recursionCount--;
-	if (recursionCount === 0){
-		findMines(maxArea, availableMines);
 	}
-};
+}
 
 function findMines (maxArea, availableMines) {
 	var minableSum = 0;
@@ -99,13 +103,14 @@ function findMines (maxArea, availableMines) {
 
 					} else {
 						var found;
+						var i;
 						searchingMinesLoop:
-						for (var i = 0; i < sortingMines.length; i++){
+						for (i = 0; i < sortingMines.length; i++){
 							if (sortingMines[i].area === mine.area){
 								found = true;
 								break searchingMinesLoop;
-							};
-						};
+							}
+						}
 
 						if (found){
 							sortingMines[i].howMuch = parseFloat(sortingMines[i].howMuch) + parseFloat(mine[toMine]);
@@ -117,14 +122,14 @@ function findMines (maxArea, availableMines) {
 							sortingMines[sortingMines.length-1].howMuch = mine[toMine];
 							miningNeed.totalMinable = parseFloat(miningNeed.totalMinable) + parseFloat(mine[toMine]);
 							minableSum += parseFloat(mine[toMine]);
-						};
-					};
-				};
+						}
+					}
+				}
 			});
-		};
+		}
 	});
 	miningAlgorithm(availableMines, minableSum, needSum);
-};
+}
 
 function miningAlgorithm(availableMines, minableSum, needSum){
 	calculateLoop:
@@ -138,7 +143,7 @@ function miningAlgorithm(availableMines, minableSum, needSum){
 					miningNeed.weightedNeed = (parseFloat(miningNeed.quantity) / needSum * availableMines * 100) - parseFloat(miningNeed.runningSum);
 				} else {
 					miningNeed.weightedNeed = (parseFloat(miningNeed.quantity) / needSum * availableMines * 100);
-				};
+				}
 
 				if (miningNeed.weightedNeed < 0){
 					miningNeed.weightedNeed = 0;
@@ -146,7 +151,7 @@ function miningAlgorithm(availableMines, minableSum, needSum){
 
 				weightedNeedSum += parseFloat(miningNeed.weightedNeed);
 
-			};
+			}
 		});
 
 		needsList.forEach(function(miningNeed){
@@ -155,7 +160,7 @@ function miningAlgorithm(availableMines, minableSum, needSum){
 				miningNeed.priority = parseFloat(miningNeed.percentofWeightedNeed) / parseFloat(miningNeed.percentOfTotalMinable);
 			} else {
 				miningNeed.priority = 0;	
-			};
+			}
 		});
 
 		needsList.sort(function(a, b){
@@ -181,23 +186,23 @@ function miningAlgorithm(availableMines, minableSum, needSum){
 								} else {
 									miningNeed.runningSum = parseFloat(sortingMines[l][miningNeed.name]);
 								}
-							};
-						};
+							}
+						}
 					});
 					break chooseLoop;
-				};
-			};
-		};
-	};
+				}
+			}
+		}
+	}
 	var sortedMines = [];
 	sortingMines.forEach(function(e){
 		if(e.hasOwnProperty("order")){
 			sortedMines.push(e);
 		}
-	})	
+	});
 
 	displayResults(sortedMines);
-};
+}
 
 var resultDiv = document.getElementById("result");
 var sortedDiv = document.getElementById("sorted-by-area");
@@ -227,41 +232,52 @@ function displayResults (sortedMines) {
 		sortedMines.forEach(function(e){
 			content = "Mine at Area " + e.area;
 			sortedDiv.insertAdjacentHTML("beforeend", content + "<br>");
-		})
-	};
+		});
+	}
 
 	document.getElementById("needs").innerHTML = "<p>You will need:</p>";
+	//sort needsList by source, then by quantity
+
+	needsList.sort(function(a, b){
+		if (a.source === b.source){
+			return (a.quantity < b.quantity) ? 1 : (a.quantity > b.quantity) ? -1 : 0;
+		} else {
+			return (a.source > b.source) ? -1 : 1;
+		}
+	});
+
 	for (var i = 0; i < needsList.length; i++){
 		var qu = needsList[i].quantity.toLocaleString("en-us");
 		var st = needsList[i].name;
 		var so = needsList[i].source;
 		var content = qu + " " + st + " via " + so;
 		var time = [0,0,0,0];
+		var ti;
 
 		if (needsList[i].hasOwnProperty("batch")){
-			var ti = needsList[i].time * needsList[i].quantity / needsList[i].batch;
+			ti = needsList[i].time * needsList[i].quantity / needsList[i].batch;
 		} else {
-			var ti = needsList[i].time * needsList[i].quantity;
+			ti = needsList[i].time * needsList[i].quantity;
 		}
 
 		if (ti >= 86400){
 			time[0] = Math.floor(ti/86400);
 			ti -= time[0] * 86400;
-		};
+		}
 		if (ti >= 3600){
 			time[1] = Math.floor(ti/3600);
 			ti -= time[1] * 3600;
-		};
+		}
 		if (ti >= 60){
 			time[2] = Math.floor(ti/60);
 			ti -= time[2] * 60;
-		};
+		}
 		time[3] = ti;
 
 		time.forEach(function(value, index, time){
 			if (value === 0){
 				time[index] = "00";
-			};
+			}
 		});
 
 		var timeStr = "";
@@ -271,33 +287,80 @@ function displayResults (sortedMines) {
 			timeStr = time[1] + ":" + time[2] + ":" + time[3];
 		} else {
 			timeStr = time[2] + ":" + time[3];
-		};
+		}
 
 		if (needsList[i].time){
 			content += ", which will take " + timeStr;
 		}
 		document.getElementById("needs").insertAdjacentHTML("beforeend", content + "<br>");
 	}
-};
+}
 
 document.getElementById("submit-button").addEventListener("click", function(e){
-	e.preventDefault();
-
 	sortingMines = [];
 	needsList = [];
+	itemArray = [];
 	recursionCount = 0;
 
 	document.getElementById("needs").innerHTML = "";
-	var what = document.getElementById("what").value;
-	var howMany = document.getElementById("how-many").value;
-	var howManyMines = document.getElementById("mines").value;
+
+	var what = document.getElementsByClassName("what");
+	var howMany = document.getElementsByClassName("how-many");
+
+	for (var i = 0; i < what.length; i++){
+		console.log(what[i].value, howMany[i].value);
+		var item = {};
+		item.name = what[i].value;
+		item.quantity = howMany[i].value;
+
+		if (itemArray.length === 0){
+			itemArray.push(item);
+		} else {
+			var matchCounter = 0;
+			for (var j = itemArray.length -1; j >=0; j--){
+				if (itemArray[j].name === item.name){
+					itemArray[j].quantity = parseFloat(itemArray[j].quantity) + parseFloat(item.quantity);
+					break;
+				} else {
+					matchCounter++;
+					if (matchCounter === itemArray.length){
+						itemArray.push(item);
+					}
+				}
+			}
+		}
+	}
+
+	var availableMines = document.getElementById("mines").value;
 	var maxArea = document.getElementById("area").value;
-	makeThese(what, howMany, howManyMines, maxArea);
+	makeInputNeeds(itemArray, availableMines, maxArea);
 });
 
-document.querySelector(".mine-results").addEventListener("click", toggleMines)
+document.getElementById("more").addEventListener("click", addForm);
+
+function addForm(){
+	//clone the form
+	var parentForm = document.getElementById("form");
+	var item = document.querySelector(".item-needs");
+	var itemClone = item.cloneNode(true);
+	var last = document.querySelectorAll(".item-needs")[document.querySelectorAll(".item-needs").length-1];
+	parentForm.insertBefore(itemClone, last.nextSibling);
+	//add delete button to cloned form
+	var deleteButton = document.createElement("button");
+	deleteButton.classList.add("buttons");
+	deleteButton.innerHTML = "Remove Item";
+	deleteButton.type = "button";
+	last = document.querySelectorAll(".item-needs")[document.querySelectorAll(".item-needs").length-1];
+	last.appendChild(deleteButton);
+	//tell delete button which div to delete
+	deleteButton.addEventListener("click", function(e){
+		last.parentNode.removeChild(last);
+	});
+}
+
+document.querySelector(".mine-results").addEventListener("click", toggleMines);
+
 function toggleMines(e){
-	e.preventDefault();
 	resultDiv.classList.toggle("hidden");
 	sortedDiv.classList.toggle("hidden");
-};
+}

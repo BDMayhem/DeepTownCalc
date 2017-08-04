@@ -10,3 +10,7 @@
 .hidden {
 	display: none;
 }
+
+.line {
+	text-decoration: line-through;
+}
