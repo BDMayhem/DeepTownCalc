@@ -7,17 +7,20 @@
 <body>
 
 	<h1>Deep Town Calc</h1>
-	<p>Right now, it's very limited.  You enter what you want to make, how much you want, and how many mines you have.  It will tell you where to place your mines, as well as how many of each material (and, if applicable, how long) it will require.</p>
-	<p>In future updates, I hope to make the mine decider smarter, allow multiple goods, and perhaps let you enter in how many of each material you already have.  I might even add some styling someday.</p>
+	<p>DTC will help you make stuff faster!  You enter what you want to make, how much you want, and how many mines you have.  It will tell you where to place your mines, as well as how many of each material (and, if applicable, how long) it will require.</p>
+	<p>In future updates, I hope to <span class="line">make the mine decider smarter</span>, <span class="line">allow multiple goods</span>, determine times based on multiple smelters, crafters, etc., and perhaps let you enter in how many of each material you already have.  I might even add some styling someday.</p>
 	<p>I'm not sure there will ever be a total time calculator, because mining rates change based on whether you're logged in.  </p>
 	<p>If you want to contribute, <a href="https://www.github.com/bdmayhem/DeepTownCalc">check out the repo</a>.</p>
 
-	<form>
-		<label>What do you want to make?<select id="what" placeholder="What do you want to build?"></select></label><br>
-		<label>How many do you want<input type="number" id="how-many" value="100"></label><br>
-		<label>How many mines do you have?<input type="number" id="mines" value="10"></label><br>
+	<form id="form">
+		<div class="item-needs">
+			<label>What do you want to make?<select class="what" placeholder="What do you want to build?"></select></label><br>
+			<label>How many do you want<input type="number" class="how-many" value="100"></label><br>
+		</div>
+		<label id="mines-label">How many mines do you have?<input type="number" id="mines" value="10"></label><br>
 		<label>Max area?<input type="number" id="area" value="75"></label>
-		<button id="submit-button">Submit</button>
+		<button id="more" type="button">Make More Stuff</button>
+		<button id="submit-button" type="button">Submit</button>
 	</form>
 
 	<div class="row">

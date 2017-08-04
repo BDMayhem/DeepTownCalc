@@ -1,30 +1,40 @@
 var sortingMines = [];
 var needsList = [];
+var itemArray = [];
 var recursionCount = 0;
 var noTime = ["mining", "shop", "waterCollection"];
 
 //set up select options
-var select = document.getElementById("what");
-materials.sort(function(a, b){
-	if (a.name > b.name){
-		return 1;
-	}
-	if (a.name < b.name){
-		return -1;
-	}
-	return 0;
-});
+var select = document.getElementsByClassName("what");
+for (var i = 0; i < select.length; i++){
+	materials.sort(function(a, b){
+		if (a.name > b.name){
+			return 1;
+		}
+		if (a.name < b.name){
+			return -1;
+		}
+		return 0;
+	});
 
-materials.forEach(function(e){
-	var name = e.name;
-	var el = document.createElement("option");
-	el.textContent = name;
-	el.value = name;
-	select.appendChild(el);
-});
+	materials.forEach(function(e){
+		var name = e.name;
+		var el = document.createElement("option");
+		el.textContent = name;
+		el.value = name;
+		select[i].appendChild(el);
+	});
+}
 
-function makeThese(stuff, quant, availableMines, maxArea){
-	recursionCount++;
+function makeInputNeeds(itemArray, availableMines, maxArea){
+	itemArray.forEach(function(e){
+		makeThese(e.name, e.quantity);
+	});
+
+	findMines(maxArea, availableMines);
+}
+
+function makeThese(stuff, quant){
 
 	var material = materials.filter(function(e){
 		return e.name === stuff;
@@ -61,20 +71,15 @@ function makeThese(stuff, quant, availableMines, maxArea){
 					q = ((wholeBatches + 1) * e.quantity);
 				}
 
-				makeThese(e.thing, q, availableMines, maxArea);
+				makeThese(e.thing, q);
 
 			});
 		} else {
 			material.toMake.forEach(function(e){
 				q = e.quantity * quant;
-				makeThese(e.thing, q, availableMines, maxArea);
+				makeThese(e.thing, q);
 			});
 		}
-	}
-
-	recursionCount--;
-	if (recursionCount === 0){
-		findMines(maxArea, availableMines);
 	}
 }
 
@@ -231,6 +236,16 @@ function displayResults (sortedMines) {
 	}
 
 	document.getElementById("needs").innerHTML = "<p>You will need:</p>";
+	//sort needsList by source, then by quantity
+
+	needsList.sort(function(a, b){
+		if (a.source === b.source){
+			return (a.quantity < b.quantity) ? 1 : (a.quantity > b.quantity) ? -1 : 0;
+		} else {
+			return (a.source > b.source) ? -1 : 1;
+		}
+	});
+
 	for (var i = 0; i < needsList.length; i++){
 		var qu = needsList[i].quantity.toLocaleString("en-us");
 		var st = needsList[i].name;
@@ -282,24 +297,70 @@ function displayResults (sortedMines) {
 }
 
 document.getElementById("submit-button").addEventListener("click", function(e){
-	e.preventDefault();
-
 	sortingMines = [];
 	needsList = [];
+	itemArray = [];
 	recursionCount = 0;
 
 	document.getElementById("needs").innerHTML = "";
-	var what = document.getElementById("what").value;
-	var howMany = document.getElementById("how-many").value;
-	var howManyMines = document.getElementById("mines").value;
+
+	var what = document.getElementsByClassName("what");
+	var howMany = document.getElementsByClassName("how-many");
+
+	for (var i = 0; i < what.length; i++){
+		console.log(what[i].value, howMany[i].value);
+		var item = {};
+		item.name = what[i].value;
+		item.quantity = howMany[i].value;
+
+		if (itemArray.length === 0){
+			itemArray.push(item);
+		} else {
+			var matchCounter = 0;
+			for (var j = itemArray.length -1; j >=0; j--){
+				if (itemArray[j].name === item.name){
+					itemArray[j].quantity = parseFloat(itemArray[j].quantity) + parseFloat(item.quantity);
+					break;
+				} else {
+					matchCounter++;
+					if (matchCounter === itemArray.length){
+						itemArray.push(item);
+					}
+				}
+			}
+		}
+	}
+
+	var availableMines = document.getElementById("mines").value;
 	var maxArea = document.getElementById("area").value;
-	makeThese(what, howMany, howManyMines, maxArea);
+	makeInputNeeds(itemArray, availableMines, maxArea);
 });
+
+document.getElementById("more").addEventListener("click", addForm);
+
+function addForm(){
+	//clone the form
+	var parentForm = document.getElementById("form");
+	var item = document.querySelector(".item-needs");
+	var itemClone = item.cloneNode(true);
+	var last = document.querySelectorAll(".item-needs")[document.querySelectorAll(".item-needs").length-1];
+	parentForm.insertBefore(itemClone, last.nextSibling);
+	//add delete button to cloned form
+	var deleteButton = document.createElement("button");
+	deleteButton.classList.add("buttons");
+	deleteButton.innerHTML = "Remove Item";
+	deleteButton.type = "button";
+	last = document.querySelectorAll(".item-needs")[document.querySelectorAll(".item-needs").length-1];
+	last.appendChild(deleteButton);
+	//tell delete button which div to delete
+	deleteButton.addEventListener("click", function(e){
+		last.parentNode.removeChild(last);
+	});
+}
 
 document.querySelector(".mine-results").addEventListener("click", toggleMines);
 
 function toggleMines(e){
-	e.preventDefault();
 	resultDiv.classList.toggle("hidden");
 	sortedDiv.classList.toggle("hidden");
 }
