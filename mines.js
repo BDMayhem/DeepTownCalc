@@ -1,4 +1,4 @@
-var mines = [
+const mines = [
 	{
 		area: "1",
 		coal: "100"
