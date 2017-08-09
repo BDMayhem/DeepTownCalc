@@ -333,6 +333,8 @@ function displayResults (sortedMines) {
 }
 
 document.getElementById("submit-button").addEventListener("click", function(e){
+	e.preventDefault();
+	
 	sortingMines = [];
 	needsList = [];
 	itemArray = [];

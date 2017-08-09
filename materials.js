@@ -42,6 +42,39 @@ const materials  = [
 		name: "amethyst",
 		source: "mining"
 	}, {
+	// 	name: "titaniumOre",
+	// 	source: "mining"
+	// }, {
+	// 	name: "alexandrite",
+	// 	source: "mining"
+	// }, {
+	// 	name: "uranium",
+	// 	source: "mining"
+	// }, {
+	// 	name: "uraniumRod",
+	// 	source: "Enrichment"
+	// }, {
+	// 	name: "polishedAlexandrite",
+	// 	source: "jewelCrafting"
+	// }, {
+	// 	name: "titanium",
+	// 	source: "chemistry"
+	// }, {
+	// 	name: "diethylEther",
+	// 	source: "chemistry"
+	// }, {
+	// 	name: "gunpowder",
+	// 	source: "chemistry"
+	// }, {
+	// 	name: "gear",
+	// 	source: "crafting"
+	// }, {
+	// 	name: "bomb",
+	// 	source: "crafting"
+	// }, {
+	// 	name: "titaniumBar",
+	// 	source: "smelting"
+	// }, {
 		name: "copperBar",
 		source: "smelting",
 		time: "10",
