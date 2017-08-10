@@ -42,48 +42,116 @@ const materials  = [
 		name: "amethyst",
 		source: "mining"
 	}, {
-	// 	name: "titaniumOre",
-	// 	source: "mining"
-	// }, {
-	// 	name: "alexandrite",
-	// 	source: "mining"
-	// }, {
-	// 	name: "uranium",
-	// 	source: "mining"
-	// }, {
-	// 	name: "uraniumRod",
-	// 	source: "Enrichment"
-	// }, {
-	// 	name: "polishedAlexandrite",
-	// 	source: "jewelCrafting"
-	// }, {
-	// 	name: "titanium",
-	// 	source: "chemistry"
-	// }, {
-	// 	name: "diethylEther",
-	// 	source: "chemistry"
-	// }, {
-	// 	name: "gunpowder",
-	// 	source: "chemistry"
-	// }, {
-	// 	name: "gear",
-	// 	source: "crafting"
-	// }, {
-	// 	name: "bomb",
-	// 	source: "crafting"
-	// }, {
-	// 	name: "titaniumBar",
-	// 	source: "smelting"
-	// }, {
+		name: "titaniumOre",
+		source: "mining"
+	}, {
+		name: "alexandrite",
+		source: "mining"
+	}, {
+		name: "uranium",
+		source: "mining"
+	}, {
+		name: "uraniumRod",
+		source: "Enrichment",
+		time: "600",
+		toMake: [
+			{
+				thing: "uranium",
+				quantity: "100"
+			}, {
+				thing: "sodium",
+				quantity: "50"
+			}
+		]
+	}, {
+		name: "polishedAlexandrite",
+		source: "jewelCrafting",
+		time: "60",
+		toMake: [
+			{
+				thing: "alexandrite",
+				quantity: "5"
+			}
+		]
+	}, {
+		name: "titanium",
+		source: "chemistry"
+	}, {
+		name: "diethylEther",
+		source: "chemistry",
+		time: "60",
+		toMake: [
+			{
+				thing: "sulfuricAcid",
+				quantity: "1"
+			}, {
+				thing: "ethanol",
+				quantity: "1"
+			}
+		]
+	}, {
+		name: "gunpowder",
+		source: "chemistry",
+		time: "120",
+		batch: "20",
+		toMake: [
+			{
+				thing: "diethylEther",
+				quantity: "1"
+			}, {
+				thing: "sulfuricAcid",
+				quantity: "2"
+			}, {
+				thing: "wood",
+				quantity: "2"
+			}
+		]
+	}, {
+		name: "gear",
+		source: "crafting",
+		time: "80",
+		toMake: [
+			{
+				thing: "diamondCutter",
+				quantity: "1"
+			}, {
+				thing: "titaniumBar",
+				quantity: "1"
+			}
+		]
+	}, {
+		name: "bomb",
+		source: "crafting",
+		time: "120",
+		toMake: [
+			{
+				thing: "titaniumBar",
+				quantity: "5"
+			}, {
+				thing: "gunpowder",
+				quantity: "10"
+			}
+		]
+	}, {
+		name: "titaniumBar",
+		source: "smelting",
+		time: "60",
+		toMake: [
+			{
+				thing: "titanium",
+				quantity: "5"
+			}
+		]
+	}, {
 		name: "copperBar",
 		source: "smelting",
 		time: "10",
 		toMake: [
-				{
-					thing: "copper",
-					quantity: "5"
-				}
-			]
+			{
+				thing: "copper",
+				quantity: "5"
+			}
+		]
 	}, {
 		name: "ironBar",
 		source: "smelting",

@@ -437,5 +437,62 @@ const mines = [
 		ruby: "30",
 		amethyst: "37",
 		diamond: "18"
+	}, {
+		area: "85",
+		amethyst: "100"
+	}, {
+		area: "86",
+		amethyst: "70",
+		alexandrite: "30"
+	}, {
+		area: "87",
+		amethyst: "36",
+		titanium: "26",
+		alexandrite: "25"
+	}, {
+		area: "88",
+		amethyst: "35",
+		titanium: "30",
+		alexandrite: "24"
+	}, {
+		area: "89",
+		amethyst: "33",
+		titanium: "33",
+		alexandrite: "23"
+	}, {
+		area: "90",
+		amethyst: "31",
+		titanium: "36",
+		alexandrite: "22"
+	}, {
+		area: "91",
+		amethyst: "30",
+		titanium: "40",
+		alexandrite: "22"
+	}, {
+		area: "92",
+		amethyst: "28",
+		titanium: "43",
+		alexandrite: "21"
+	}, {
+		area: "93",
+		amethyst: "26",
+		titanium: "46",
+		alexandrite: "20"
+	}, {
+		area: "94",
+		amethyst: "25",
+		titanium: "50",
+		alexandrite: "19"
+	}, {
+		area: "95",
+		amethyst: "23",
+		titanium: "53",
+		alexandrite: "18"
+	}, {
+		area: "96",
+		amethyst: "21",
+		titanium: "56",
+		alexandrite: "17"
 	}
 ];
