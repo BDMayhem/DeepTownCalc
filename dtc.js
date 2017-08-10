@@ -283,12 +283,14 @@ function displayResults (sortedMines) {
 	});
 
 	for (let i = 0; i < needsList.length; i++){
+
 		const qu = needsList[i].quantity.toLocaleString("en-us");
 		const st = needsList[i].name;
 		const so = needsList[i].source;
 		let content = qu + " " + st + " via " + so;
 		const time = [0,0,0,0];
 		let ti;
+	if(!noTime.includes(needsList[i].source)){
 
 		if (needsList[i].hasOwnProperty("batch")){
 			ti = needsList[i].time * needsList[i].quantity / needsList[i].batch;
@@ -325,7 +327,6 @@ function displayResults (sortedMines) {
 			timeStr = time[2] + ":" + time[3];
 		}
 
-		if (needsList[i].time){
 			content += ", which will take " + timeStr;
 		}
 		document.getElementById("needs").insertAdjacentHTML("beforeend", content + "<br>");
