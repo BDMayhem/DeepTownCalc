@@ -42,15 +42,116 @@ const materials  = [
 		name: "amethyst",
 		source: "mining"
 	}, {
+		name: "titaniumOre",
+		source: "mining"
+	}, {
+		name: "alexandrite",
+		source: "mining"
+	}, {
+		name: "uranium",
+		source: "mining"
+	}, {
+		name: "uraniumRod",
+		source: "Enrichment",
+		time: "600",
+		toMake: [
+			{
+				thing: "uranium",
+				quantity: "100"
+			}, {
+				thing: "sodium",
+				quantity: "50"
+			}
+		]
+	}, {
+		name: "polishedAlexandrite",
+		source: "jewelCrafting",
+		time: "60",
+		toMake: [
+			{
+				thing: "alexandrite",
+				quantity: "5"
+			}
+		]
+	}, {
+		name: "titanium",
+		source: "chemistry"
+	}, {
+		name: "diethylEther",
+		source: "chemistry",
+		time: "60",
+		toMake: [
+			{
+				thing: "sulfuricAcid",
+				quantity: "1"
+			}, {
+				thing: "ethanol",
+				quantity: "1"
+			}
+		]
+	}, {
+		name: "gunpowder",
+		source: "chemistry",
+		time: "120",
+		batch: "20",
+		toMake: [
+			{
+				thing: "diethylEther",
+				quantity: "1"
+			}, {
+				thing: "sulfuricAcid",
+				quantity: "2"
+			}, {
+				thing: "wood",
+				quantity: "2"
+			}
+		]
+	}, {
+		name: "gear",
+		source: "crafting",
+		time: "80",
+		toMake: [
+			{
+				thing: "diamondCutter",
+				quantity: "1"
+			}, {
+				thing: "titaniumBar",
+				quantity: "1"
+			}
+		]
+	}, {
+		name: "bomb",
+		source: "crafting",
+		time: "120",
+		toMake: [
+			{
+				thing: "titaniumBar",
+				quantity: "5"
+			}, {
+				thing: "gunpowder",
+				quantity: "10"
+			}
+		]
+	}, {
+		name: "titaniumBar",
+		source: "smelting",
+		time: "60",
+		toMake: [
+			{
+				thing: "titanium",
+				quantity: "5"
+			}
+		]
+	}, {
 		name: "copperBar",
 		source: "smelting",
 		time: "10",
 		toMake: [
-				{
-					thing: "copper",
-					quantity: "5"
-				}
-			]
+			{
+				thing: "copper",
+				quantity: "5"
+			}
+		]
 	}, {
 		name: "ironBar",
 		source: "smelting",
@@ -174,7 +275,7 @@ const materials  = [
 	}, {
 		name: "battery",
 		source: "crafting",
-		time: "20",
+		time: "120",
 		value: "200",
 		toMake: [
 			{
@@ -248,7 +349,6 @@ const materials  = [
 		name: "aluminumBottle",
 		source: "crafting",
 		time: "30",
-		batch: "2",
 		value: "55",
 		toMake: [
 			{
@@ -288,6 +388,7 @@ const materials  = [
 		name: "greenLaser",
 		source: "crafting",
 		time: "20",
+		batch: "5",
 		value: "400",
 		toMake: [
 			{
@@ -318,7 +419,7 @@ const materials  = [
 	}, {
 		name: "motherboard",
 		source: "crafting",
-		time: "30",
+		time: "1800",
 		value: "17000",
 		toMake: [
 			{
@@ -335,7 +436,7 @@ const materials  = [
 	}, {
 		name: "solidPropellant",
 		source: "crafting",
-		time: "20",
+		time: "1200",
 		value: "27000",
 		toMake: [
 			{
@@ -474,7 +575,7 @@ const materials  = [
 	}, {
 		name: "rubber",
 		source: "chemistry",
-		time: "900",
+		time: "1800",
 		value: "4000",
 		batch: "2",
 		toMake: [
