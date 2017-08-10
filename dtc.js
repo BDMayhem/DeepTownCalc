@@ -26,6 +26,45 @@ for (let i = 0; i < select.length; i++){
 	});
 }
 
+function submit(){
+	sortingMines = [];
+	needsList = [];
+	itemArray = [];
+	recursionCount = 0;
+
+	document.getElementById("needs").innerHTML = "";
+
+	const what = document.getElementsByClassName("what");
+	const howMany = document.getElementsByClassName("how-many");
+
+	for (let i = 0; i < what.length; i++){
+		const item = {};
+		item.name = what[i].value;
+		item.quantity = howMany[i].value;
+
+		if (itemArray.length === 0){
+			itemArray.push(item);
+		} else {
+			let matchCounter = 0;
+			for (let j = itemArray.length -1; j >=0; j--){
+				if (itemArray[j].name === item.name){
+					itemArray[j].quantity = parseFloat(itemArray[j].quantity) + parseFloat(item.quantity);
+					break;
+				} else {
+					matchCounter++;
+					if (matchCounter === itemArray.length){
+						itemArray.push(item);
+					}
+				}
+			}
+		}
+	}
+
+	const availableMines = document.getElementById("mines").value;
+	const maxArea = document.getElementById("area").value;
+	makeInputNeeds(itemArray, availableMines, maxArea);
+}
+
 function makeInputNeeds(itemArray, availableMines, maxArea){
 	itemArray.forEach(function(e){
 		makeThese(e.name, e.quantity);
@@ -45,6 +84,13 @@ function makeThese(stuff, quant){
 
 	//build array of all needs
 	material.quantity = quant;
+
+	if (material.hasOwnProperty("batch")){
+		material.batches = Math.ceil(quant / material.batch);
+	} else {
+		material.batches = quant;
+	}
+
 	if (needsList.length === 0){
 		needsList.push(Object.assign({}, material));
 	} else {
@@ -64,25 +110,10 @@ function makeThese(stuff, quant){
 	//recurse if necessary
 	let q;
 	if (material.hasOwnProperty("toMake")){
-		//make sure we're working with whole batches
-		if (material.hasOwnProperty("batch")){
-			material.toMake.forEach(function(e){
-				if (quant % material.batch === 0){
-					q = quant * e.quantity / material.batch;
-				} else {
-					const wholeBatches = Math.floor(quant / material.batch);
-					q = ((wholeBatches + 1) * e.quantity);
-				}
-
-				makeThese(e.thing, q);
-
-			});
-		} else {
-			material.toMake.forEach(function(e){
-				q = e.quantity * quant;
-				makeThese(e.thing, q);
-			});
-		}
+		material.toMake.forEach(function(e){
+			q = material.batches * e.quantity;
+			makeThese(e.thing, q);
+		});
 	}
 }
 
@@ -272,11 +303,10 @@ function displayResults (sortedMines) {
 	}
 
 	document.getElementById("needs").innerHTML = "<p>You will need:</p>";
-	//sort needsList by source, then by quantity
-
+	//sort needsList by source, then by batches
 	needsList.sort(function(a, b){
 		if (a.source === b.source){
-			return (a.quantity < b.quantity) ? 1 : (a.quantity > b.quantity) ? -1 : 0;
+			return (a.batches < b.batches) ? 1 : (a.batches > b.batches) ? -1 : 0;
 		} else {
 			return (a.source > b.source) ? -1 : 1;
 		}
@@ -290,42 +320,39 @@ function displayResults (sortedMines) {
 		let content = qu + " " + st + " via " + so;
 		const time = [0,0,0,0];
 		let ti;
-	if(!noTime.includes(needsList[i].source)){
 
-		if (needsList[i].hasOwnProperty("batch")){
-			ti = needsList[i].time * needsList[i].quantity / needsList[i].batch;
-		} else {
-			ti = needsList[i].time * needsList[i].quantity;
-		}
+		if(!noTime.includes(needsList[i].source)){
 
-		if (ti >= 86400){
-			time[0] = Math.floor(ti/86400);
-			ti -= time[0] * 86400;
-		}
-		if (ti >= 3600){
-			time[1] = Math.floor(ti/3600);
-			ti -= time[1] * 3600;
-		}
-		if (ti >= 60){
-			time[2] = Math.floor(ti/60);
-			ti -= time[2] * 60;
-		}
-		time[3] = ti;
+			ti = needsList[i].time * needsList[i].batches;
 
-		time.forEach(function(value, index, time){
-			if (value === 0){
-				time[index] = "00";
+			if (ti >= 86400){
+				time[0] = Math.floor(ti/86400);
+				ti -= time[0] * 86400;
 			}
-		});
+			if (ti >= 3600){
+				time[1] = Math.floor(ti/3600);
+				ti -= time[1] * 3600;
+			}
+			if (ti >= 60){
+				time[2] = Math.floor(ti/60);
+				ti -= time[2] * 60;
+			}
+			time[3] = ti;
 
-		let timeStr = "";
-		if (time[0] > 0){
-			timeStr = time[0] + ":" + time[1] + ":" + time[2] + ":" + time[3];
-		} else  if (time[1] > 0){
-			timeStr = time[1] + ":" + time[2] + ":" + time[3];
-		} else {
-			timeStr = time[2] + ":" + time[3];
-		}
+			time.forEach(function(value, index, time){
+				if (value === 0){
+					time[index] = "00";
+				}
+			});
+
+			let timeStr = "";
+			if (time[0] > 0){
+				timeStr = time[0] + ":" + time[1] + ":" + time[2] + ":" + time[3];
+			} else  if (time[1] > 0){
+				timeStr = time[1] + ":" + time[2] + ":" + time[3];
+			} else {
+				timeStr = time[2] + ":" + time[3];
+			}
 
 			content += ", which will take " + timeStr;
 		}
@@ -335,43 +362,7 @@ function displayResults (sortedMines) {
 
 document.getElementById("submit-button").addEventListener("click", function(e){
 	e.preventDefault();
-	
-	sortingMines = [];
-	needsList = [];
-	itemArray = [];
-	recursionCount = 0;
-
-	document.getElementById("needs").innerHTML = "";
-
-	const what = document.getElementsByClassName("what");
-	const howMany = document.getElementsByClassName("how-many");
-
-	for (let i = 0; i < what.length; i++){
-		const item = {};
-		item.name = what[i].value;
-		item.quantity = howMany[i].value;
-
-		if (itemArray.length === 0){
-			itemArray.push(item);
-		} else {
-			let matchCounter = 0;
-			for (let j = itemArray.length -1; j >=0; j--){
-				if (itemArray[j].name === item.name){
-					itemArray[j].quantity = parseFloat(itemArray[j].quantity) + parseFloat(item.quantity);
-					break;
-				} else {
-					matchCounter++;
-					if (matchCounter === itemArray.length){
-						itemArray.push(item);
-					}
-				}
-			}
-		}
-	}
-
-	const availableMines = document.getElementById("mines").value;
-	const maxArea = document.getElementById("area").value;
-	makeInputNeeds(itemArray, availableMines, maxArea);
+	submit();	
 });
 
 document.getElementById("more").addEventListener("click", addForm);
