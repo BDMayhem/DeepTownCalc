@@ -1,3 +1,7 @@
+body {
+	/* line-height: 1.6; */
+}
+
 .row {
 	display: flex;
 	justify-content: flex-start;
