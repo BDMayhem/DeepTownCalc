@@ -75,7 +75,18 @@ const materials  = [
 		]
 	}, {
 		name: "titanium",
-		source: "chemistry"
+		source: "chemistry",
+		time: "20",
+		batch: "50",
+		toMake: [
+			{
+				thing: "sulfuricAcid",
+				quantity: "1"
+			}, {
+				thing: "titaniumOre",
+				quantity: "100"
+			}
+		]
 	}, {
 		name: "diethylEther",
 		source: "chemistry",
