@@ -114,22 +114,25 @@ function makeThese(stuff, quant){
 		material.batches = quant;
 	}
 
-	if (needsList.length === 0){
-		needsList.push(Object.assign({}, material));
-	} else {
-		let matchCounter = 0;
-		for (let i = needsList.length - 1; i >= 0; i--){
-			if (needsList[i].name === material.name){
-				needsList[i].quantity = needsList[i].quantity + quant;
-				break;
-			} else {
-				matchCounter++;
-				if (matchCounter === needsList.length){
-					needsList.push(Object.assign({}, material));
+	if (quant > 0){
+		if (needsList.length === 0){
+			needsList.push(Object.assign({}, material));
+		} else {
+			let matchCounter = 0;
+			for (let i = needsList.length - 1; i >= 0; i--){
+				if (needsList[i].name === material.name){
+					needsList[i].quantity = needsList[i].quantity + quant;
+					break;
+				} else {
+					matchCounter++;
+					if (matchCounter === needsList.length){
+						needsList.push(Object.assign({}, material));
+					}
 				}
 			}
 		}
 	}
+	
 	//recurse if necessary
 	let q;
 	if (material.hasOwnProperty("toMake")){
