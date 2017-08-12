@@ -1,6 +1,7 @@
 let sortingMines = [];
 let needsList = [];
 let itemArray = [];
+let invArray = [];
 let recursionCount = 0;
 const noTime = ["mining", "shop", "waterCollection"];
 
@@ -26,16 +27,21 @@ for (let i = 0; i < select.length; i++){
 	});
 }
 
+materials.forEach(function(e){
+	const inv = '<li class="hidden"><label>' + e.name + ' <input name="' + e.name + '" type="number" class="inv" form="form"></label></li>';
+	document.getElementById("inventory").insertAdjacentHTML("beforeend", inv);
+});
+
 function submit(){
 	sortingMines = [];
 	needsList = [];
 	itemArray = [];
+	invArray = [];
 	recursionCount = 0;
-
-	document.getElementById("needs").innerHTML = "";
 
 	const what = document.getElementsByClassName("what");
 	const howMany = document.getElementsByClassName("how-many");
+	const inventory = document.getElementsByClassName("inv");
 
 	for (let i = 0; i < what.length; i++){
 		const item = {};
@@ -62,10 +68,21 @@ function submit(){
 
 	const availableMines = document.getElementById("mines").value;
 	const maxArea = document.getElementById("area").value;
-	makeInputNeeds(itemArray, availableMines, maxArea);
+
+	for (let j = 0; j < inventory.length; j++){
+		inventory[j].parentNode.parentNode.classList.add("hidden");
+		const invItem = {};
+		invItem.name = inventory[j].name;
+		invItem.quantity = inventory[j].value; 
+		if (inventory[j].value > 0){
+			invArray.push(invItem);
+		}
+	}
+
+	makeInputNeeds(availableMines, maxArea);
 }
 
-function makeInputNeeds(itemArray, availableMines, maxArea){
+function makeInputNeeds(availableMines, maxArea){
 	itemArray.forEach(function(e){
 		makeThese(e.name, e.quantity);
 	});
@@ -77,6 +94,12 @@ function makeThese(stuff, quant){
 	if (stuff === "coal" && document.getElementById("use-charcoal").checked){
 		stuff = "charcoal";
 	}
+
+	invArray.forEach(function(inventoryItem){
+		if(stuff === inventoryItem.name){
+			quant -= inventoryItem.quantity;
+		}
+	});
 
 	const material = materials.filter(function(e){
 		return e.name === stuff;
@@ -91,22 +114,25 @@ function makeThese(stuff, quant){
 		material.batches = quant;
 	}
 
-	if (needsList.length === 0){
-		needsList.push(Object.assign({}, material));
-	} else {
-		let matchCounter = 0;
-		for (let i = needsList.length - 1; i >= 0; i--){
-			if (needsList[i].name === material.name){
-				needsList[i].quantity = needsList[i].quantity + quant;
-				break;
-			} else {
-				matchCounter++;
-				if (matchCounter === needsList.length){
-					needsList.push(Object.assign({}, material));
+	if (quant > 0){
+		if (needsList.length === 0){
+			needsList.push(Object.assign({}, material));
+		} else {
+			let matchCounter = 0;
+			for (let i = needsList.length - 1; i >= 0; i--){
+				if (needsList[i].name === material.name){
+					needsList[i].quantity = needsList[i].quantity + quant;
+					break;
+				} else {
+					matchCounter++;
+					if (matchCounter === needsList.length){
+						needsList.push(Object.assign({}, material));
+					}
 				}
 			}
 		}
 	}
+	
 	//recurse if necessary
 	let q;
 	if (material.hasOwnProperty("toMake")){
@@ -303,10 +329,10 @@ function displayResults (sortedMines) {
 	}
 
 	document.getElementById("needs").innerHTML = "<p>You will need:</p>";
-	//sort needsList by source, then by batches
+	//sort needsList by source, then by quantity
 	needsList.sort(function(a, b){
 		if (a.source === b.source){
-			return (a.batches < b.batches) ? 1 : (a.batches > b.batches) ? -1 : 0;
+			return (a.quantity < b.quantity) ? 1 : (a.quantity > b.quantity) ? -1 : 0;
 		} else {
 			return (a.source > b.source) ? -1 : 1;
 		}
@@ -314,49 +340,67 @@ function displayResults (sortedMines) {
 
 	for (let i = 0; i < needsList.length; i++){
 
-		const qu = needsList[i].quantity.toLocaleString("en-us");
-		const st = needsList[i].name;
-		const so = needsList[i].source;
-		let content = qu + " " + st + " via " + so;
-		const time = [0,0,0,0];
-		let ti;
+		if (needsList[i].quantity > 0){
+			const qu = needsList[i].quantity.toLocaleString("en-us");
+			const st = needsList[i].name;
+			// const so = needsList[i].source;
+			let content = qu + " " + st;
+			const time = [0,0,0,0];
+			let ti;
 
-		if(!noTime.includes(needsList[i].source)){
+			if(!noTime.includes(needsList[i].source)){
 
-			ti = needsList[i].time * needsList[i].batches;
+				ti = needsList[i].time * needsList[i].batches;
 
-			if (ti >= 86400){
-				time[0] = Math.floor(ti/86400);
-				ti -= time[0] * 86400;
-			}
-			if (ti >= 3600){
-				time[1] = Math.floor(ti/3600);
-				ti -= time[1] * 3600;
-			}
-			if (ti >= 60){
-				time[2] = Math.floor(ti/60);
-				ti -= time[2] * 60;
-			}
-			time[3] = ti;
-
-			time.forEach(function(value, index, time){
-				if (value === 0){
-					time[index] = "00";
+				if (ti >= 86400){
+					time[0] = Math.floor(ti/86400);
+					ti -= time[0] * 86400;
 				}
-			});
+				if (ti >= 3600){
+					time[1] = Math.floor(ti/3600);
+					ti -= time[1] * 3600;
+				}
+				if (ti >= 60){
+					time[2] = Math.floor(ti/60);
+					ti -= time[2] * 60;
+				}
+				time[3] = ti;
 
-			let timeStr = "";
-			if (time[0] > 0){
-				timeStr = time[0] + ":" + time[1] + ":" + time[2] + ":" + time[3];
-			} else  if (time[1] > 0){
-				timeStr = time[1] + ":" + time[2] + ":" + time[3];
-			} else {
-				timeStr = time[2] + ":" + time[3];
+				time.forEach(function(value, index, time){
+					if (value === 0){
+						time[index] = "00";
+					}
+				});
+
+				let timeStr = "";
+				if (time[0] > 0){
+					timeStr = time[0] + ":" + time[1] + ":" + time[2] + ":" + time[3];
+				} else  if (time[1] > 0){
+					timeStr = time[1] + ":" + time[2] + ":" + time[3];
+				} else {
+					timeStr = time[2] + ":" + time[3];
+				}
+
+				content += ", which will take " + timeStr;
 			}
 
-			content += ", which will take " + timeStr;
+			if (i === 0){
+				document.getElementById("needs").insertAdjacentHTML("beforeend", "<h3>" + needsList[i].source + "</h3>");
+			} else if (i > 0 && needsList[i].source != needsList[i-1].source){
+				document.getElementById("needs").insertAdjacentHTML("beforeend", "<h3>" + needsList[i].source + "</h3>");
+			}
+
+			document.getElementById("needs").insertAdjacentHTML("beforeend", content + "<br>");
+
 		}
-		document.getElementById("needs").insertAdjacentHTML("beforeend", content + "<br>");
+
+		const invDiv = document.getElementsByClassName("inv");
+		for (let j = 0; j < invDiv.length; j++){
+			if (invDiv[j].name === needsList[i].name){
+				invDiv[j].parentNode.parentNode.classList.remove("hidden");
+				break;
+			}
+		}
 	}
 }
 
