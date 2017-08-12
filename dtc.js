@@ -381,7 +381,7 @@ function displayResults (sortedMines) {
 					timeStr = time[2] + ":" + time[3];
 				}
 
-				content += ", which will take " + timeStr;
+				content += " - " + timeStr;
 			}
 
 			if (i === 0){
@@ -431,7 +431,7 @@ function addForm(){
 	});
 }
 
-document.querySelector(".mine-results").addEventListener("click", toggleMines);
+document.querySelector("#mine-results").addEventListener("click", toggleMines);
 
 function toggleMines(e){
 	resultDiv.classList.toggle("hidden");

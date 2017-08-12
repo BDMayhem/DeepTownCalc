@@ -1,14 +1,81 @@
 body {
-	/* line-height: 1.6; */
+	line-height: 1.3; 
+	background-color: #47331F;
+	color: #ccc;
+	text-shadow: 0 0 1px black;
+	font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif
 }
 
-.row {
-	display: flex;
-	justify-content: flex-start;
+.grid {
+	background-image: url("background-b.jpg");
+	background-size: 100%;
+	background-repeat: no-repeat;
+	width: 95%;
+	min-height: 100vh;
+	margin: 0 auto;
+	display: grid;
+	grid-gap: 1em;
+	grid-template-areas: 
+		"h1"
+		"info"
+		"form"
+		"mine-results"
+		"needs"
+		"inventory"
 }
 
-.row div {
-	padding: 10px;
+h1 {
+	grid-area: h1;
+}
+
+#form {
+	grid-area: form;
+}
+
+#info {
+	display: inline-block;
+	grid-area: info;
+	margin: 0 2.5%;
+	padding: 0 2.5%;
+	background-color: rgba(173, 130, 144, 0.1);
+	border-radius: 20px;
+}
+
+#mine-results {
+	grid-area: mine-results;
+}
+
+#needs {
+	grid-area: needs;
+}
+
+#inventory {
+	grid-area: inventory;
+}
+
+@media only screen and (min-width: 600px) {
+	.grid {
+		width: 80%;
+		grid-template-columns: 1fr 1fr 1fr;
+		grid-template-rows: 100px auto 2fr;
+		grid-template-areas: 
+			"h1 h1 h1"
+			"form info info"
+			"mine-results needs inventory";
+	}
+}
+
+input, select, button {
+	padding: 2px;
+	background-color: #AD822C;
+	border: 1px solid black;
+	border-radius: 3px;
+	position: relative;
+}
+
+button {
+	height: 2em;
+	margin: 1em;
 }
 
 .hidden {
@@ -17,4 +84,8 @@ body {
 
 .line {
 	text-decoration: line-through;
+}
+
+a {
+	color: grey;
 }
