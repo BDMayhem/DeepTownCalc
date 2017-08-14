@@ -28,7 +28,7 @@ for (let i = 0; i < select.length; i++){
 }
 
 materials.forEach(function(e){
-	const inv = '<li class="hidden"><label>' + e.name + ' <input name="' + e.name + '" type="number" class="inv" form="form"></label></li>';
+	const inv = '<li class="hidden"><label class="invLabel">' + e.name + ' </label><input name="' + e.name + '" type="number" class="inv" form="form"></li>';
 	document.getElementById("inventory").insertAdjacentHTML("beforeend", inv);
 });
 
@@ -70,7 +70,7 @@ function submit(){
 	const maxArea = document.getElementById("area").value;
 
 	for (let j = 0; j < inventory.length; j++){
-		inventory[j].parentNode.parentNode.classList.add("hidden");
+		inventory[j].parentNode.classList.add("hidden");
 		const invItem = {};
 		invItem.name = inventory[j].name;
 		invItem.quantity = inventory[j].value; 
@@ -303,8 +303,8 @@ let content;
 
 function displayResults (sortedMines) {
 	if (sortedMines.length === 0){
-		document.getElementById("result").innerHTML = "<p>Mining isn't going to help you with this</p>";
-		document.getElementById("sorted-by-area").innerHTML = "<p>Mining isn't going to help you with this</p>";
+		document.getElementById("result").innerHTML = "<p class='center'>No materials to mine</p>";
+		document.getElementById("sorted-by-area").innerHTML = "<p class='center'>No materials to mine</p>";
 	} else {
 		sortedMines.sort(function(a, b){
 			return a.order - b.order;
@@ -328,7 +328,7 @@ function displayResults (sortedMines) {
 		});
 	}
 
-	document.getElementById("needs").innerHTML = "<p>You will need:</p>";
+	document.getElementById("needs").innerHTML = "<p class='center'>You will need:</p>";
 	//sort needsList by source, then by quantity
 	needsList.sort(function(a, b){
 		if (a.source === b.source){
@@ -397,7 +397,7 @@ function displayResults (sortedMines) {
 		const invDiv = document.getElementsByClassName("inv");
 		for (let j = 0; j < invDiv.length; j++){
 			if (invDiv[j].name === needsList[i].name){
-				invDiv[j].parentNode.parentNode.classList.remove("hidden");
+				invDiv[j].parentNode.classList.remove("hidden");
 				break;
 			}
 		}
@@ -409,25 +409,46 @@ document.getElementById("submit-button").addEventListener("click", function(e){
 	submit();	
 });
 
-document.getElementById("more").addEventListener("click", addForm);
+document.querySelector(".more").addEventListener("click", addForm);
 
 function addForm(){
+	if (document.querySelectorAll(".item-needs").length > 1){
+		document.querySelector(".item-needs").removeChild(document.querySelector(".delete-button"));
+	}
+
 	//clone the form
 	const parentForm = document.getElementById("form");
 	const item = document.querySelector(".item-needs");
 	const itemClone = item.cloneNode(true);
 	let last = document.querySelectorAll(".item-needs")[document.querySelectorAll(".item-needs").length-1];
 	parentForm.insertBefore(itemClone, last.nextSibling);
+
 	//add delete button to cloned form
 	const deleteButton = document.createElement("button");
-	deleteButton.classList.add("buttons");
-	deleteButton.innerHTML = "Remove Item";
+	deleteButton.innerHTML = "X";
 	deleteButton.type = "button";
+	deleteButton.classList.add("delete-button");
 	last = document.querySelectorAll(".item-needs")[document.querySelectorAll(".item-needs").length-1];
 	last.appendChild(deleteButton);
+
+	//add delete button to first form
+	const firstDeleteButton = document.createElement("button");
+	firstDeleteButton.innerHTML = "X";
+	firstDeleteButton.type = "button";
+	firstDeleteButton.classList.add("delete-button");
+	item.appendChild(firstDeleteButton);
+	firstDeleteButton.addEventListener("click", function(){
+		item.parentNode.removeChild(item);
+	});
+
 	//tell delete button which div to delete
 	deleteButton.addEventListener("click", function(e){
 		last.parentNode.removeChild(last);
+		//delete button from first form
+		if (document.querySelectorAll(".item-needs").length === 1){
+			console.log("delete that button")
+			document.querySelector(".item-needs").removeChild(document.querySelector(".delete-button"));
+		}
 	});
 }
 
