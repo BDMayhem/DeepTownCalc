@@ -1,3 +1,88 @@
+/* ============
+main grid stuff
+=============== */
+
+.grid {
+	display: grid;
+	grid-gap: 1em;
+	grid-template-areas: 
+		"h1"
+		"info"
+		"form"
+		"mine-results"
+		"needs"
+		"inventory"
+		"footer"
+}
+
+h1 {
+	grid-area: h1;
+}
+
+#form {
+	grid-area: form;
+}
+
+#info {
+	grid-area: info;
+}
+
+#mine-results {
+	grid-area: mine-results;
+}
+
+#needs {
+	grid-area: needs;
+}
+
+#inventory {
+	grid-area: inventory;
+}
+
+footer {
+	grid-area: footer;
+}
+
+@media only screen and (min-width: 800px) {
+	.grid {
+		grid-template-columns: 1fr 1fr 1fr;
+		grid-template-rows: 100px auto 2fr;
+		grid-template-areas: 
+			"h1 h1 h1"
+			"form info info"
+			"mine-results needs inventory"
+			"footer footer footer";
+	}
+}
+
+/* ==============
+nested grid stuff
+================= */
+
+ .item-needs {
+	display: grid;
+	grid-template-columns: 9fr 1fr;
+} 
+
+.item {
+	grid-column: 1 / 10;
+	grid-row: 1;
+}
+
+.quantity {
+	grid-column: 1 / 10;
+	grid-row: 2;
+}
+
+.delete-button {
+	grid-column: 10;
+	grid-row: 1 / 3;
+}
+
+/* ============
+general styling
+=============== */
+
 body {
 	line-height: 1.3; 
 	background-color: #47331F;
@@ -14,54 +99,35 @@ body {
 	width: 95%;
 	min-height: 100vh;
 	margin: 0 auto;
-	display: grid;
-	grid-gap: 1em;
-	grid-template-areas: 
-		"h1"
-		"info"
-		"form"
-		"mine-results"
-		"needs"
-		"inventory"
-		"footer"
 }
 
 h1 {
-	grid-area: h1;
 	text-align: center;
-}
-
-#form {
-	grid-area: form;
 }
 
 #info {
 	display: inline-block;
-	grid-area: info;
+	align-self: start;
 	margin: 0 2.5%;
 	padding: 0 2.5%;
 	background-color: rgba(173, 130, 144, 0.1);
 	border-radius: 20px;
-	align-self: start;
 	font-size: 1.1rem;
 }
 
 #mine-results {
-	grid-area: mine-results;
 	border-radius: 20px;
 	border: 1px solid rgba(173, 130, 144, 0.3);
 	padding: 3%;
 }
 
 #needs {
-	grid-area: needs;
 	border-radius: 20px;
 	border: 1px solid rgba(173, 130, 144, 0.3);
 	padding: 3%;
 }
 
 #inventory {
-	grid-area: inventory;
 	border-radius: 20px;
 	border: 1px solid rgba(173, 130, 144, 0.3);
 	padding: 3%;
@@ -70,13 +136,6 @@ h1 {
 @media only screen and (min-width: 800px) {
 	.grid {
 		width: 80%;
-		grid-template-columns: 1fr 1fr 1fr;
-		grid-template-rows: 100px auto 2fr;
-		grid-template-areas: 
-			"h1 h1 h1"
-			"form info info"
-			"mine-results needs inventory"
-			"footer footer footer";
 	}
 
 	#mine-results {
@@ -120,24 +179,10 @@ label {
 }
 
  .item-needs {
-	display: grid;
-	grid-template-columns: 9fr 1fr;
 	margin-top: 2%;
 } 
 
-.item {
-	grid-column: 1 / 10;
-	grid-row: 1;
-}
-
-.quantity {
-	grid-column: 1 / 10;
-	grid-row: 2;
-}
-
 .delete-button {
-	grid-column: 10;
-	grid-row: 1 / 3;
 	margin: 0;
 	height: 100%;
 	width: 100%;
@@ -162,7 +207,6 @@ a:not(.footer) {
 }
 
 footer {
-	grid-area: footer;
 	background-color: #AD822C;
 	padding: 1%;
 }
@@ -176,3 +220,18 @@ a.footer:visited {
 	color: #ddd;
 }
 
+li#coal-slider {
+	display: flex;
+	flex-flow: row nowrap;
+	align-content: space-between;
+}
+
+li#coal-source {
+	display: flex;
+	flex-flow: row nowrap;
+	justify-content: space-between;
+}
+
+#coal-slider > input[type="range"] {
+	width: 100%;
+}

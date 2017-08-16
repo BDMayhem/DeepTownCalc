@@ -29,7 +29,21 @@
 			<li><label>Mines </label><input type="number" id="mines" value="10"></li>
 			<li><label>Max area </label><input type="number" id="area" value="75"></li>
 			<li><button id="submit-button">Submit</button></li>
-			<li><label>Source coal from wood? <input type="checkbox" id="use-charcoal" /></label></li>
+			<li id="coal-source"><div id="mining">Mining</div><div id="source">Coal Source</div><div id="trees">Trees</div></li>
+			<li id="coal-slider"> 
+				<span id="coal">100</span>
+				<input id="slider" type="range" min="0" max="100" value="0" onchange="showValue(this.value)" />
+				<span id="charcoal">0</span>
+				
+				<script type="text/javascript">
+					function showValue(newValue)
+					{
+						document.getElementById("coal").innerHTML=100 - newValue;
+						document.getElementById("charcoal").innerHTML=newValue;
+					}
+				</script>
+			</li>
+			
 		</form>
 
 		<div id="mine-results">

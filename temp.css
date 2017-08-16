@@ -1,0 +1,38 @@
+#grid {
+  display: grid;
+	grid-template-columns: 1fr 1fr 1fr;
+	grid-template-areas: 
+      "h1 h1 h1"
+			"inputs info info"
+			"column1 column2 column3";
+  grid-gap: 1em;
+}
+
+h1 {
+  grid-area: h1;
+  text-align: center;
+}
+
+#inputs {
+  grid-area: inputs;
+}
+
+#info {
+  grid-area: info;
+  background-color: grey;
+  border-radius: 10px;
+  padding: 5px;
+}
+
+#column1 {
+  grid-area: column1;
+}
+
+#column2 {
+  grid-area: column2;
+}
+
+#column3 {
+  grid-area: column3;
+}
+

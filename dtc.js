@@ -91,8 +91,14 @@ function makeInputNeeds(availableMines, maxArea){
 }
 
 function makeThese(stuff, quant){
-	if (stuff === "coal" && document.getElementById("use-charcoal").checked){
-		stuff = "charcoal";
+	//check the coal source slider
+	if (stuff === "coal"){
+		const coalRatio = document.getElementById("coal").innerHTML;
+		const coalQuant = Math.ceil(quant * coalRatio / 100);
+		if (quant - coalQuant){
+			makeThese("charcoal", Math.ceil(quant * (100-coalRatio) / 100));
+		}
+		quant = coalQuant;
 	}
 
 	invArray.forEach(function(inventoryItem){
@@ -422,31 +428,24 @@ function addForm(){
 	const itemClone = item.cloneNode(true);
 	let last = document.querySelectorAll(".item-needs")[document.querySelectorAll(".item-needs").length-1];
 	parentForm.insertBefore(itemClone, last.nextSibling);
+	last = document.querySelectorAll(".item-needs")[document.querySelectorAll(".item-needs").length-1];
+	
+	addDeleteButton(item);
+	addDeleteButton(last);
+}
 
-	//add delete button to cloned form
+function addDeleteButton(where){
 	const deleteButton = document.createElement("button");
 	deleteButton.innerHTML = "X";
 	deleteButton.type = "button";
 	deleteButton.classList.add("delete-button");
-	last = document.querySelectorAll(".item-needs")[document.querySelectorAll(".item-needs").length-1];
-	last.appendChild(deleteButton);
-
-	//add delete button to first form
-	const firstDeleteButton = document.createElement("button");
-	firstDeleteButton.innerHTML = "X";
-	firstDeleteButton.type = "button";
-	firstDeleteButton.classList.add("delete-button");
-	item.appendChild(firstDeleteButton);
-	firstDeleteButton.addEventListener("click", function(){
-		item.parentNode.removeChild(item);
-	});
+	where.appendChild(deleteButton);
 
 	//tell delete button which div to delete
 	deleteButton.addEventListener("click", function(e){
-		last.parentNode.removeChild(last);
+		where.parentNode.removeChild(where);
 		//delete button from first form
 		if (document.querySelectorAll(".item-needs").length === 1){
-			console.log("delete that button")
 			document.querySelector(".item-needs").removeChild(document.querySelector(".delete-button"));
 		}
 	});
