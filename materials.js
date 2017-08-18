@@ -52,7 +52,7 @@ const materials  = [
 		source: "mining"
 	}, {
 		name: "uraniumRod",
-		source: "Enrichment",
+		source: "enrichment",
 		time: "600",
 		toMake: [
 			{
@@ -113,7 +113,7 @@ const materials  = [
 				thing: "sulfuricAcid",
 				quantity: "2"
 			}, {
-				thing: "wood",
+				thing: "tree",
 				quantity: "2"
 			}
 		]
@@ -224,7 +224,7 @@ const materials  = [
 		batch: "50",
 		toMake: [
 			{
-				thing: "wood",
+				thing: "tree",
 				quantity: "1"
 			}
 		]
@@ -516,7 +516,7 @@ const materials  = [
 		source: "waterCollection",
 		value: "5"
 	}, {
-		name: "wood",
+		name: "tree",
 		source: "greenhouse",
 		time: "1800",
 		batch: "10",

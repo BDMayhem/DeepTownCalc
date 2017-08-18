@@ -448,51 +448,71 @@ const mines = [
 		area: "87",
 		amethyst: "36",
 		titanium: "26",
-		alexandrite: "25"
+		alexandrite: "25",
+		platinum: "9.73",
+		uranium: "2.4"
 	}, {
 		area: "88",
 		amethyst: "35",
 		titanium: "30",
-		alexandrite: "24"
+		alexandrite: "24",
+		platinum: "8.93",
+		uranium: "1.47"
 	}, {
 		area: "89",
 		amethyst: "33",
 		titanium: "33",
-		alexandrite: "23"
+		alexandrite: "23",
+		platinum: "7.73",
+		uranium: "1.33"
 	}, {
 		area: "90",
 		amethyst: "31",
 		titanium: "36",
-		alexandrite: "22"
+		alexandrite: "22",
+		platinum: "6.53",
+		uranium: "1.2"
 	}, {
 		area: "91",
 		amethyst: "30",
 		titanium: "40",
-		alexandrite: "22"
+		alexandrite: "22",
+		platinum: "5.2",
+		uranium: "1.2"
 	}, {
 		area: "92",
 		amethyst: "28",
 		titanium: "43",
-		alexandrite: "21"
+		alexandrite: "21",
+		platinum: "6.27",
+		uranium: "1.6"
 	}, {
 		area: "93",
 		amethyst: "26",
 		titanium: "46",
-		alexandrite: "20"
+		alexandrite: "20",
+		platinum: "4",
+		uranium: "1.2"
 	}, {
 		area: "94",
 		amethyst: "25",
 		titanium: "50",
-		alexandrite: "19"
+		alexandrite: "19",
+		platinum: "4.93",
+		uranium: "0.53"
 	}, {
 		area: "95",
 		amethyst: "23",
 		titanium: "53",
-		alexandrite: "18"
+		alexandrite: "18",
+		platinum: "4.93",
+		uranium: "0.53"
 	}, {
 		area: "96",
 		amethyst: "21",
 		titanium: "56",
-		alexandrite: "17"
+		alexandrite: "17",
+		platinum: "3.33",
+		uranium: "0.27"
 	}
 ];
