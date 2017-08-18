@@ -3,11 +3,12 @@ let needsList = [];
 let itemArray = [];
 let invArray = [];
 let recursionCount = 0;
-const noTime = ["mining", "shop", "waterCollection"];
+const noTime = ["mining", "shop", "waterCollection", "oilPumping"];
 
 //set up select options
 const select = document.getElementsByClassName("what");
 for (let i = 0; i < select.length; i++){
+
 	materials.sort(function(a, b){
 		if (a.name > b.name){
 			return 1;
@@ -27,12 +28,60 @@ for (let i = 0; i < select.length; i++){
 	});
 }
 
-materials.forEach(function(e){
-	const inv = '<li class="hidden"><label class="invLabel">' + e.name + ' </label><input name="' + e.name + '" type="number" class="inv" form="form"></li>';
-	document.getElementById("inventory").insertAdjacentHTML("beforeend", inv);
+materials.sort(function(a, b){
+	if (a.source === b.source){
+		return (a.name > b.name) ? 1 : (a.name < b.name) ? -1 : 0;
+	} else {
+		return (a.source > b.source) ? 1 : -1;
+	}
 });
 
-function submit(){
+for (let i = 0; i < materials.length; i++){
+	//source headings
+	if (i === 0 || i > 0 && materials[i].source != materials[i - 1].source){
+		document.getElementById("needs").insertAdjacentHTML("beforeend", "<h3 class='hidden center'><span class='mat' data-source='" + materials[i].source + "' />" + materials[i].source + "</h3>");
+		document.getElementById("inventory").insertAdjacentHTML("beforeend", "<h3 class='hidden center'><span class='inv' data-source='" + materials[i].source + "' />" + materials[i].source + "</h3>");
+	}
+
+	//build inventory div
+	const inv = '<li class="hidden"><label class="invLabel">' + materials[i].name + ' </label><input name="' + materials[i].name + '" type="number" min="0" class="inv" form="form" oninput="submitButton()"></li>';
+	document.getElementById("inventory").insertAdjacentHTML("beforeend", inv);
+
+	//materials list
+	let mat = "";
+	if (!noTime.includes(materials[i].source)){
+		mat = '<li class="hidden" data-source="' + materials[i].source + '"><span class="quantity"></span> ' + materials[i].name + ' <span class="time mat" data-name="' + materials[i].name + '"></span>&nbsp;&nbsp;&nbsp;<span class="plus">+</span> [<span class="number"></span>] <span class="minus">-</span></li>';
+	} else {
+		mat = '<li class="hidden" data-source="' + materials[i].source + '"><span class="quantity"></span> ' + materials[i].name + ' <span class="time mat" data-name="' + materials[i].name + '"></span>&nbsp;&nbsp;&nbsp;<span class="plus hidden">+ [</span><span class="number hidden"></span><span class="minus hidden">] -</span></li>';
+	}
+
+	document.getElementById("needs").insertAdjacentHTML("beforeend", mat);
+
+	//stations buttons
+	const minus = document.getElementsByClassName("minus");
+	const numbers = document.getElementsByClassName("number");
+	const plus = document.getElementsByClassName("plus");
+	let num = numbers[numbers.length - 1];
+
+
+	if (!num.innerHTML) {
+		num.innerHTML = 1;
+	}
+
+	minus[minus.length - 1].addEventListener("click", function(e){
+		if (num.innerHTML > 1){
+			num.innerHTML--;
+			submitButton();
+		}
+	});
+
+	plus[plus.length - 1].addEventListener("click", function(e){
+		num.innerHTML++;
+		submitButton();
+	});
+}
+
+function submitButton(){
 	sortingMines = [];
 	needsList = [];
 	itemArray = [];
@@ -69,16 +118,20 @@ function submit(){
 	const availableMines = document.getElementById("mines").value;
 	const maxArea = document.getElementById("area").value;
 
-	for (let j = 0; j < inventory.length; j++){
-		inventory[j].parentNode.classList.add("hidden");
+	for (let i = 0; i < inventory.length; i++){
+		inventory[i].parentNode.classList.add("hidden");
 		const invItem = {};
-		invItem.name = inventory[j].name;
-		invItem.quantity = inventory[j].value; 
-		if (inventory[j].value > 0){
+		invItem.name = inventory[i].name;
+		invItem.quantity = inventory[i].value; 
+		if (inventory[i].value > 0){
 			invArray.push(invItem);
 		}
 	}
 
+	const matList = document.getElementsByClassName("mat");
+	for (let i = 0; i < matList.length; i++){
+		matList[i].parentNode.classList.add("hidden");
+	}
 	makeInputNeeds(availableMines, maxArea);
 }
 
@@ -94,7 +147,7 @@ function makeThese(stuff, quant){
 	//check the coal source slider
 	if (stuff === "coal"){
 		const coalRatio = document.getElementById("coal").innerHTML;
-		const coalQuant = Math.ceil(quant * coalRatio / 100);
+		const coalQuant = Math.ceil(quant * coalRatio / 100);	
 		if (quant - coalQuant){
 			makeThese("charcoal", Math.ceil(quant * (100-coalRatio) / 100));
 		}
@@ -102,8 +155,11 @@ function makeThese(stuff, quant){
 	}
 
 	invArray.forEach(function(inventoryItem){
-		if(stuff === inventoryItem.name){
-			quant -= inventoryItem.quantity;
+		if(stuff === inventoryItem.name && inventoryItem.quantity > 0){
+			let reduce = inventoryItem.quantity;
+			inventoryItem.quantity -= quant;
+			quant -= reduce;
+			(quant < 0) ? 0 : quant;
 		}
 	});
 
@@ -112,7 +168,20 @@ function makeThese(stuff, quant){
 	})[0];
 
 	//build array of all needs
+
+	//add stations to material for bottleneck use
 	material.quantity = quant;
+	const matStation = document.getElementsByClassName("mat");
+	const matStat = Array.prototype.filter.call(matStation, function(e){
+		return e.dataset.name === material.name;
+	})[0];
+	
+	material.stations = matStat.nextElementSibling.nextElementSibling.innerHTML;
+
+	//this is to calculate bottleneck
+	if (!material.hasOwnProperty("time")){
+		material.time = 0;
+	}
 
 	if (material.hasOwnProperty("batch")){
 		material.batches = Math.ceil(quant / material.batch);
@@ -127,7 +196,7 @@ function makeThese(stuff, quant){
 			let matchCounter = 0;
 			for (let i = needsList.length - 1; i >= 0; i--){
 				if (needsList[i].name === material.name){
-					needsList[i].quantity = needsList[i].quantity + quant;
+					needsList[i].quantity = parseInt(needsList[i].quantity) + parseInt(quant);
 					break;
 				} else {
 					matchCounter++;
@@ -275,7 +344,7 @@ function miningAlgorithm(availableMines, minableSum, needSum, minableNeeds){
 		}
 	});
 
-	displayResults(sortedMines);
+	displayMines(sortedMines);
 }
 
 function chooseMine(orderIndex){
@@ -305,36 +374,40 @@ function chooseMine(orderIndex){
 
 const resultDiv = document.getElementById("result");
 const sortedDiv = document.getElementById("sorted-by-area");
-let content;
 
-function displayResults (sortedMines) {
+function displayMines (sortedMines) {
+	let content;
+	
 	if (sortedMines.length === 0){
-		document.getElementById("result").innerHTML = "<p class='center'>No materials to mine</p>";
-		document.getElementById("sorted-by-area").innerHTML = "<p class='center'>No materials to mine</p>";
+		resultDiv.innerHTML = "<p class='center'>No materials to mine</p>";
+		sortedDiv.innerHTML = "<p class='center'>No materials to mine</p>";
 	} else {
+		//click list to display mines list sorted by priority
 		sortedMines.sort(function(a, b){
 			return a.order - b.order;
 		});
 
-		//click list to display mines list sorted by priority
-		document.getElementById("result").innerHTML = "<p>Click to sort mines by area</p>";
+		resultDiv.innerHTML = "<p>Click to sort mines by area</p>";
 		sortedMines.forEach(function(e){
 			content = "Mine at Area " + e.area;
 			resultDiv.insertAdjacentHTML("beforeend", content + "<br>");
 		});
 
 		//click list to display mines list sorted by area
-		document.getElementById("sorted-by-area").innerHTML = "<p>Click to sort mines by priority</p>";
+		sortedDiv.innerHTML = "<p>Click to sort mines by priority</p>";
 		sortedMines.sort(function(a, b){
 			return a.area - b.area;
 		});
+
 		sortedMines.forEach(function(e){
 			content = "Mine at Area " + e.area;
 			sortedDiv.insertAdjacentHTML("beforeend", content + "<br>");
 		});
 	}
+	displayNeeds();
+}
 
-	document.getElementById("needs").innerHTML = "<p class='center'>You will need:</p>";
+function displayNeeds(){
 	//sort needsList by source, then by quantity
 	needsList.sort(function(a, b){
 		if (a.source === b.source){
@@ -343,77 +416,84 @@ function displayResults (sortedMines) {
 			return (a.source > b.source) ? -1 : 1;
 		}
 	});
+	
+	const matDiv = document.getElementsByClassName("mat");
+	const invDiv = document.getElementsByClassName("inv");
 
+	
 	for (let i = 0; i < needsList.length; i++){
+		for (let j = 0; j < matDiv.length; j++){
+			if (needsList[i].name === matDiv[j].dataset.name){
+				
+				const bottleneck = Math.max.apply(Math, needsList.map(function(e){
+					return Math.ceil(parseInt(e.batches) * parseInt(e.time) / e.stations);
+				}));
 
-		if (needsList[i].quantity > 0){
-			const qu = needsList[i].quantity.toLocaleString("en-us");
-			const st = needsList[i].name;
-			// const so = needsList[i].source;
-			let content = qu + " " + st;
-			const time = [0,0,0,0];
-			let ti;
-
-			if(!noTime.includes(needsList[i].source)){
-
-				ti = needsList[i].time * needsList[i].batches;
-
-				if (ti >= 86400){
-					time[0] = Math.floor(ti/86400);
-					ti -= time[0] * 86400;
-				}
-				if (ti >= 3600){
-					time[1] = Math.floor(ti/3600);
-					ti -= time[1] * 3600;
-				}
-				if (ti >= 60){
-					time[2] = Math.floor(ti/60);
-					ti -= time[2] * 60;
-				}
-				time[3] = ti;
-
-				time.forEach(function(value, index, time){
-					if (value === 0){
-						time[index] = "00";
-					}
-				});
-
-				let timeStr = "";
-				if (time[0] > 0){
-					timeStr = time[0] + ":" + time[1] + ":" + time[2] + ":" + time[3];
-				} else  if (time[1] > 0){
-					timeStr = time[1] + ":" + time[2] + ":" + time[3];
-				} else {
-					timeStr = time[2] + ":" + time[3];
-				}
-
-				content += " - " + timeStr;
-			}
-
-			if (i === 0){
-				document.getElementById("needs").insertAdjacentHTML("beforeend", "<h3>" + needsList[i].source + "</h3>");
-			} else if (i > 0 && needsList[i].source != needsList[i-1].source){
-				document.getElementById("needs").insertAdjacentHTML("beforeend", "<h3>" + needsList[i].source + "</h3>");
-			}
-
-			document.getElementById("needs").insertAdjacentHTML("beforeend", content + "<br>");
-
-		}
-
-		const invDiv = document.getElementsByClassName("inv");
-		for (let j = 0; j < invDiv.length; j++){
-			if (invDiv[j].name === needsList[i].name){
+				const qu = Math.ceil(needsList[i].quantity / needsList[i].stations).toLocaleString("en-us");
+				const st = needsList[i].name;
+				
+				matDiv[j].classList.remove("bottleneck");
+				matDiv[j].parentNode.classList.remove("hidden");
 				invDiv[j].parentNode.classList.remove("hidden");
-				break;
+				matDiv[j].previousElementSibling.innerHTML = qu + "&nbsp;";
+				invDiv[j].previousElementSibling.innerHTML = st + "&nbsp;";
+
+				if (needsList[i].quantity > 0){
+					const time = [0,0,0,0];
+					let ti;
+					let timeStr = "";
+					
+					if(!noTime.includes(needsList[i].source)){
+						
+						ti = Math.ceil(needsList[i].time / needsList[i].stations * needsList[i].batches);
+						console.log(needsList[i].name, ti, bottleneck)
+						if (ti === bottleneck){
+							matDiv[j].classList.add("bottleneck");
+						}
+
+						if (ti < needsList[i].time) {
+							ti = needsList[i].time;
+						}
+						
+						if (ti >= 86400){
+							time[0] = Math.floor(ti/86400);
+							ti -= time[0] * 86400;
+						}
+						if (ti >= 3600){
+							time[1] = Math.floor(ti/3600);
+							ti -= time[1] * 3600;
+						}
+						if (ti >= 60){
+							time[2] = Math.floor(ti/60);
+							ti -= time[2] * 60;
+						}
+						time[3] = ti;
+						
+						time.forEach(function(value, index, time){
+							if (value === 0){
+								time[index] = "00";
+							}
+						});
+						
+						if (time[0] > 0){
+							timeStr = "&nbsp;- " + time[0] + ":" + time[1] + ":" + time[2] + ":" + time[3];
+						} else  if (time[1] > 0){
+							timeStr = "&nbsp;- " + time[1] + ":" + time[2] + ":" + time[3];
+						} else {
+							timeStr = "&nbsp;- " + time[2] + ":" + time[3];
+						}
+					}
+					matDiv[j].innerHTML = timeStr;
+				}
+				
+			}
+			if (matDiv[j].dataset.source === needsList[i].source){
+				matDiv[j].parentNode.classList.remove("hidden");
+				invDiv[j].parentNode.classList.remove("hidden");
 			}
 		}
 	}
 }
-
-document.getElementById("submit-button").addEventListener("click", function(e){
-	e.preventDefault();
-	submit();	
-});
 
 document.querySelector(".more").addEventListener("click", addForm);
 
@@ -432,6 +512,7 @@ function addForm(){
 	
 	addDeleteButton(item);
 	addDeleteButton(last);
+	submitButton();
 }
 
 function addDeleteButton(where){
@@ -448,6 +529,7 @@ function addDeleteButton(where){
 		if (document.querySelectorAll(".item-needs").length === 1){
 			document.querySelector(".item-needs").removeChild(document.querySelector(".delete-button"));
 		}
+		submitButton();
 	});
 }
 
@@ -456,4 +538,30 @@ document.querySelector("#mine-results").addEventListener("click", toggleMines);
 function toggleMines(e){
 	resultDiv.classList.toggle("hidden");
 	sortedDiv.classList.toggle("hidden");
+}
+
+function showValue(newValue) {
+	document.getElementById("coal").innerHTML=100 - newValue;
+	document.getElementById("charcoal").innerHTML=newValue;
+	submitButton();
+}
+
+document.getElementById("show-all").addEventListener("click", showAll);
+
+function showAll(){
+	Array.prototype.map.call(document.getElementsByClassName("inv"), function(e){
+		e.parentNode.classList.remove("hidden");
+	});
+
+	document.getElementById("show-all").classList.add("hidden");
+	document.querySelector("#hide").classList.remove("hidden");
+
+}
+
+document.getElementById("hide").addEventListener("click", hide);
+
+function hide(){
+	document.getElementById("show-all").classList.remove("hidden");
+	document.getElementById("hide").classList.add("hidden");
+	submitButton();
 }

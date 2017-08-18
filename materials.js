@@ -52,7 +52,7 @@ const materials  = [
 		source: "mining"
 	}, {
 		name: "uraniumRod",
-		source: "Enrichment",
+		source: "enrichment",
 		time: "600",
 		toMake: [
 			{

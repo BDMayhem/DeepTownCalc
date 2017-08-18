@@ -16,32 +16,25 @@
 		<h1>Deep Town Calc</h1>
 		<div id="info">
 			<p>DTC will help you make stuff faster!  You enter what you want to make, how much you want, and how many mines you have.  It will tell you where to place your mines, as well as how many of each material (and, if applicable, how long) it will require.</p>
-			<p>After you submit, enter your current inventory of the materials you need.  Click Submit again to recalculate.</p>
-			<p>If you want to contribute, <a href="https://www.github.com/bdmayhem/DeepTownCalc">check out the repo</a>.</p>
+			<p>In the "Everything You Need" list, the number in [brackets] represents the number of assigned stations of that type.  You can add smelting, crafting, etc. stations by clicking the plus sign (+).  To help indicate bottlenecks, the longest time in the list will appear in <span class="bottleneck">red</span>.</p>
+			<p>In the last column, enter your current inventory of the materials you need.</p>
+			<p>To keep things clear, coal smelted from trees is called "charcoal."</p>
+			<p>If you're morbidly curious about how this site works, <a href="https://www.github.com/bdmayhem/DeepTownCalc">check out the repo</a>.</p>
 		</div>
 
 		<form id="form">
 			<div class="item-needs">
-				<li class="item"><label>Item </label><select class="what" placeholder="What do you want to build?"></select></li>
-				<li class="quantity"><label>Quantity </label><input type="number" class="how-many" value="100"></li>
+				<li class="item"><label>Item </label><select class="what" placeholder="What do you want to build?" name="stuff" oninput="submitButton()"></select></li>
+				<li class="quantity"><label>Quantity </label><input type="number" min="0" class="how-many" value="100" oninput="submitButton()"></li>
 			</div>
 			<li><button class="more" type="button">Make More Stuff</button></li>
-			<li><label>Mines </label><input type="number" id="mines" value="10"></li>
-			<li><label>Max area </label><input type="number" id="area" value="75"></li>
-			<li><button id="submit-button">Submit</button></li>
+			<li><label>Mines </label><input type="number" min="0" id="mines" value="20" oninput="submitButton()"></li>
+			<li><label>Max area </label><input type="number" min="0" id="area" value="96" oninput="submitButton()"></li>
 			<li id="coal-source"><div id="mining">Mining</div><div id="source">Coal Source</div><div id="trees">Trees</div></li>
 			<li id="coal-slider"> 
 				<span id="coal">100</span>
-				<input id="slider" type="range" min="0" max="100" value="0" onchange="showValue(this.value)" />
+				<input id="slider" type="range" min="0" max="100" value="0" oninput="showValue(this.value)" />
 				<span id="charcoal">0</span>
-				
-				<script type="text/javascript">
-					function showValue(newValue)
-					{
-						document.getElementById("coal").innerHTML=100 - newValue;
-						document.getElementById("charcoal").innerHTML=newValue;
-					}
-				</script>
 			</li>
 			
 		</form>
@@ -51,7 +44,13 @@
 			<div id="sorted-by-area" class="hidden"></div>
 		</div>
 		<div id="needs"><p class="center">Everything you need</p></div>
-		<div id="inventory"><p class="center">Current Inventory</p></div>
+		<div id="inventory">
+			<div id="inv-head">
+				<p class="center">Current Inventory</p>
+				<button id="show-all" type="button">Show All</button>
+				<button id="hide" class="hidden" type="button">Hide Unneeded Inventory</button>
+			</div>
+		</div>
 	</div>
 	
 	<footer class="center">
