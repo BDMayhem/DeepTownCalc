@@ -779,5 +779,34 @@ const materials  = [
 				quantity: "5"
 			}
 		]
+	}, {
+		name: "mayaCalendar",
+		source: "jewelCrafting",
+		time: "120",
+		toMake: [
+			{
+				thing: "goldBar",
+				quantity: "10"
+			}, {
+				thing: "silverBar",
+				quantity: "2"
+			}
+		]
+	}, {
+		name: "hairComb",
+		source: "jewelCrafting",
+		time: "120",
+		toMake: [
+			{
+				thing: "silverBar",
+				quantity: "1"
+			}, {
+				thing: "polishedAmethyst",
+				quantity: "15"
+			}, {
+				thing: "polishedAlexandrite",
+				quantity: "10"
+			}
+		]
 	}
 ];

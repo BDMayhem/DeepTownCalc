@@ -285,6 +285,13 @@ function miningAlgorithm(availableMines, minableSum, needSum, minableNeeds){
 
 				if (miningNeed.weightedNeed < 0){
 					miningNeed.weightedNeed = 0;
+					//remove current need from sortingMines
+					sortingMines.forEach(function(e){
+						if (e.hasOwnProperty(miningNeed.name)){
+							e.howMuch -= e[miningNeed.name];
+							delete e[miningNeed.name];
+						}
+					});
 				}
 
 				weightedNeedSum += parseFloat(miningNeed.weightedNeed);
@@ -389,8 +396,8 @@ function displayMines (sortedMines) {
 
 		resultDiv.innerHTML = "<p>Click to sort mines by area</p>";
 		sortedMines.forEach(function(e){
-			content = "Mine at Area " + e.area;
-			resultDiv.insertAdjacentHTML("beforeend", content + "<br>");
+			content = "<li>Area&nbsp;<span class='area-priority'>" + e.area + "</span></li>";
+			resultDiv.insertAdjacentHTML("beforeend", content);
 		});
 
 		//click list to display mines list sorted by area
@@ -400,8 +407,8 @@ function displayMines (sortedMines) {
 		});
 
 		sortedMines.forEach(function(e){
-			content = "Mine at Area " + e.area;
-			sortedDiv.insertAdjacentHTML("beforeend", content + "<br>");
+			content = "<li>&nbsp;<span class='area-area'>" + e.area + "</span></li>";
+			sortedDiv.insertAdjacentHTML("beforeend", content);
 		});
 	}
 	displayNeeds();
@@ -446,7 +453,6 @@ function displayNeeds(){
 					if(!noTime.includes(needsList[i].source)){
 						
 						ti = Math.ceil(needsList[i].time / needsList[i].stations * needsList[i].batches);
-						console.log(needsList[i].name, ti, bottleneck)
 						if (ti === bottleneck){
 							matDiv[j].classList.add("bottleneck");
 						}

@@ -115,19 +115,7 @@ h1 {
 	font-size: 1.1rem;
 }
 
-#mine-results {
-	border-radius: 20px;
-	border: 1px solid rgba(173, 130, 144, 0.3);
-	padding: 3%;
-}
-
-#needs {
-	border-radius: 20px;
-	border: 1px solid rgba(173, 130, 144, 0.3);
-	padding: 3%;
-}
-
-#inventory {
+#mine-results, #needs, #inventory {
 	border-radius: 20px;
 	border: 1px solid rgba(173, 130, 144, 0.3);
 	padding: 3%;
@@ -135,19 +123,17 @@ h1 {
 
 @media only screen and (min-width: 800px) {
 	.grid {
+		width: 90%;
+	}
+
+	#mine-results, #needs, #inventory {
+		border: none;
+	}
+}
+
+@media only screen and (min-width: 1000px) {
+	.grid {
 		width: 80%;
-	}
-
-	#mine-results {
-		border: none;
-	}
-
-	#needs {
-		border: none;
-	}
-
-	#inventory {
-		border: none;
 	}
 }
 
@@ -209,6 +195,7 @@ a:not(.footer) {
 footer {
 	background-color: #AD822C;
 	padding: 1%;
+	font-size: 1rem;
 }
 
 a.footer {
@@ -249,3 +236,4 @@ li#coal-source {
 	display: flex;
 	justify-content: space-between;
 }
+
