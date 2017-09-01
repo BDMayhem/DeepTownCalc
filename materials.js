@@ -644,17 +644,17 @@ const materials  = [
 		name: "plastic",
 		source: "chemistry",
 		time: "1800",
-		value: "220000",
+		value: "40000",
 		toMake: [
 			{
 				thing: "refinedOil",
 				quantity: "1"
 			}, {
 				thing: "coal",
-				quantity: "1000"
+				quantity: "50"
 			}, {
 				thing: "greenLaser",
-				quantity: "200"
+				quantity: "1"
 			}
 		]
 	}, {
