@@ -643,7 +643,7 @@ const materials  = [
 	}, {
 		name: "plastic",
 		source: "chemistry",
-		time: "1800",
+		time: "600",
 		value: "40000",
 		toMake: [
 			{
