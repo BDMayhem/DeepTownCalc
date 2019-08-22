@@ -396,6 +396,69 @@ const materials  = [
 			}
 		]
 	}, {
+		name: "aluminumTank",
+		source: "crafting",
+		time: "120",
+		batch: "5",
+		value: "450",
+		toMake: [
+			{
+				thing: "aluminumBar",
+				quantity: "3"
+			}
+		]
+	}, {
+		name: "mirror",
+		source: "crafting",
+		time: "120",
+		batch: "2",
+		value: "450",
+		toMake: [
+			{
+				thing: "glass",
+				quantity: "1"
+			}, {
+				thing: "silverBar",
+				quantity: "1"
+			}
+		]
+	}, {
+		name: "mirrorLaser",
+		source: "crafting",
+		time: "120",
+		batch: "2",
+		value: "5400",
+		toMake: [
+			{
+				thing: "battery",
+				quantity: "1"
+			}, {
+				thing: "lamp",
+				quantity: "1"
+			}, {
+				thing: "mirror",
+				quantity: "3"
+			}
+		]
+	}, {
+		name: "gasCylinder",
+		source: "crafting",
+		time: "180",
+		batch: "3",
+		value: "30000",
+		toMake: [
+			{
+				thing: "steelPlate",
+				quantity: "1"
+			}, {
+				thing: "plastic",
+				quantity: "1"
+			}, {
+				thing: "aluminumTank",
+				quantity: "1"
+			}
+		]
+	}, {
 		name: "greenLaser",
 		source: "crafting",
 		time: "20",
