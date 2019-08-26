@@ -196,6 +196,7 @@ function makeThese(stuff, quant){
 			let matchCounter = 0;
 			for (let i = needsList.length - 1; i >= 0; i--){
 				if (needsList[i].name === material.name){
+					needsList[i].batches = parseInt(needsList[i].batches) + parseInt(quant);
 					needsList[i].quantity = parseInt(needsList[i].quantity) + parseInt(quant);
 					break;
 				} else {

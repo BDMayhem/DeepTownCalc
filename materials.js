@@ -144,6 +144,72 @@ const materials  = [
 			}
 		]
 	}, {
+		name: "compressor",
+		source: "crafting",
+		time: "180",
+		toMake: [
+			{
+				thing: "refinedOil",
+				quantity: "2"
+			}, {
+				thing: "rubber",
+				quantity: "1"
+			}, {
+				thing: "ironBar",
+				quantity: "5"
+			}
+		]
+	}, {
+		name: "opticFiber",
+		source: "crafting",
+		time: "120",
+		batch: "10",
+		toMake: [
+			{
+				thing: "silicon",
+				quantity: "10"
+			}, {
+				thing: "oxygen",
+				quantity: "10"
+			}, {
+				thing: "plastic",
+				quantity: "1"
+			}
+		]
+	}, {
+		name: "dryIce",
+		source: "crafting",
+		time: "120",
+		batch: "4",
+		toMake: [
+			{
+				thing: "compressor",
+				quantity: "1"
+			}, {
+				thing: "greenLaser",
+				quantity: "10"
+			}, {
+				thing: "graphite",
+				quantity: "1000"
+			}
+		]
+	}, {
+		name: "oxygenCylinder",
+		source: "crafting",
+		time: "120",
+		toMake: [
+			{
+				thing: "compressor",
+				quantity: "1"
+			}, {
+				thing: "gasCylinder",
+				quantity: "1"
+			}, {
+				thing: "oxygen",
+				quantity: "5"
+			}
+		]
+	}, {
 		name: "titaniumBar",
 		source: "smelting",
 		time: "60",
