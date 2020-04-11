@@ -453,7 +453,7 @@ const mines = [
 		sapphire: "16",
 		amethyst: "15",
 		alexandrite: "4",
-		titanium: "2",
+		titaniumOre: "2",
 		uranium: "2",
 		platinum: "1"
 	}, {
@@ -463,7 +463,7 @@ const mines = [
 		sapphire: "15",
 		amethyst: "17",
 		alexandrite: "6",
-		titanium: "4",
+		titaniumOre: "4",
 		uranium: "3",
 		platinum: "1"
 	}, {
@@ -473,7 +473,7 @@ const mines = [
 		sapphire: "14",
 		amethyst: "20",
 		alexandrite: "8",
-		titanium: "7",
+		titaniumOre: "7",
 		uranium: "3",
 		platinum: "1"
 	}, {
@@ -483,7 +483,7 @@ const mines = [
 		sapphire: "13",
 		amethyst: "22",
 		alexandrite: "11",
-		titanium: "8",
+		titaniumOre: "8",
 		uranium: "4",
 		platinum: "1"
 	}, {
@@ -493,7 +493,7 @@ const mines = [
 		sapphire: "12",
 		amethyst: "25",
 		alexandrite: "13",
-		titanium: "9",
+		titaniumOre: "9",
 		uranium: "4",
 		platinum: "1"
 	}, {
@@ -503,7 +503,7 @@ const mines = [
 		amethyst: "27",
 		sapphire: "11",
 		alexandrite: "15",
-		titanium: "11",
+		titaniumOre: "11",
 		uranium: "5",
 		platinum: "2"
 	}, {
@@ -513,7 +513,7 @@ const mines = [
 		amethyst: "30",
 		sapphire: "10",
 		alexandrite: "18",
-		titanium: "13",
+		titaniumOre: "13",
 		uranium: "7",
 		platinum: "2"
 	}, {
@@ -523,7 +523,7 @@ const mines = [
 		amethyst: "32",
 		sapphire: "7",
 		alexandrite: "20",
-		titanium: "15",
+		titaniumOre: "15",
 		uranium: "8",
 		platinum: "2"
 	}, {
@@ -533,7 +533,7 @@ const mines = [
 		amethyst: "35",
 		sapphire: "6",
 		alexandrite: "22",
-		titanium: "16",
+		titaniumOre: "16",
 		uranium: "9",
 		platinum: "2"
 	}, {
@@ -543,7 +543,7 @@ const mines = [
 		amethyst: "37",
 		sapphire: "2",
 		alexandrite: "24",
-		titanium: "18",
+		titaniumOre: "18",
 		uranium: "9",
 		platinum: "2"
 	}, {
@@ -555,73 +555,287 @@ const mines = [
 		alexandrite: "30"
 	}, {
 		area: "87",
-		amethyst: "36",
-		titanium: "26",
-		alexandrite: "25",
-		platinum: "9",
-		uranium: "2"
+		obsidian: "10",
+		amethyst: "33",
+		titaniumOre: "18",
+		alexandrite: "23",
+		platinum: "3",
+		uranium: "8",
+		diamond: "3",
+		sapphire: "2"
 	}, {
 		area: "88",
-		amethyst: "35",
-		titanium: "30",
-		alexandrite: "24",
-		platinum: "9",
-		uranium: "2"
+		obsidian: "15",
+		amethyst: "30",
+		titaniumOre: "18",
+		alexandrite: "20",
+		platinum: "4",
+		uranium: "8",
+		diamond: "4",
+		sapphire: "3"
 	}, {
 		area: "89",
-		amethyst: "33",
-		titanium: "33",
-		alexandrite: "23",
-		platinum: "9",
-		uranium: "1"
+		obsidian: "20",
+		amethyst: "27",
+		titaniumOre: "17",
+		alexandrite: "18",
+		platinum: "3",
+		uranium: "7",
+		diamond: "5",
+		sapphire: "4"
 	}, {
 		area: "90",
-		amethyst: "31",
-		titanium: "36",
-		alexandrite: "22",
-		platinum: "8",
-		uranium: "1"
+		obsidian: "25",
+		amethyst: "23",
+		titaniumOre: "16",
+		alexandrite: "16",
+		platinum: "3",
+		uranium: "6",
+		diamond: "6",
+		sapphire: "5"
 	}, {
 		area: "91",
-		amethyst: "30",
-		titanium: "40",
-		alexandrite: "22",
-		platinum: "7",
-		uranium: "1"
+		obsidian: "30",
+		amethyst: "20",
+		titaniumOre: "15",
+		alexandrite: "14",
+		platinum: "3",
+		uranium: "5",
+		diamond: "8",
+		sapphire: "6"
 	}, {
 		area: "92",
-		amethyst: "28",
-		titanium: "43",
-		alexandrite: "21",
-		platinum: "6",
-		uranium: "1"
+		obsidian: "35",
+		amethyst: "17",
+		titaniumOre: "14",
+		alexandrite: "11",
+		platinum: "3",
+		uranium: "4",
+		diamond: "9",
+		sapphire: "7"
 	}, {
 		area: "93",
-		amethyst: "26",
-		titanium: "46",
-		alexandrite: "20",
-		platinum: "6",
-		uranium: "1"
+		obsidian: "40",
+		amethyst: "13",
+		titaniumOre: "13",
+		alexandrite: "9",
+		platinum: "3",
+		uranium: "3",
+		diamond: "10",
+		sapphire: "8"
 	}, {
 		area: "94",
-		amethyst: "25",
-		titanium: "50",
-		alexandrite: "19",
-		platinum: "4",
-		uranium: "1"
+		obsidian: "45",
+		amethyst: "10",
+		titaniumOre: "13",
+		alexandrite: "7",
+		platinum: "3",
+		uranium: "3",
+		diamond: "11",
+		sapphire: "9"
 	}, {
 		area: "95",
-		amethyst: "23",
-		titanium: "53",
-		alexandrite: "18",
-		platinum: "4",
-		uranium: "1"
+		obsidian: "50",
+		amethyst: "7",
+		titaniumOre: "12",
+		alexandrite: "5",
+		platinum: "3",
+		uranium: "2",
+		diamond: "13",
+		sapphire: "10"
 	}, {
 		area: "96",
-		amethyst: "21",
-		titanium: "56",
-		alexandrite: "17",
+		obsidian: "55",
+		diamond: "14",
+		sapphire: "11",
+		titaniumOre: "11",
+		amethyst: "3",
 		platinum: "3",
+		alexandrite: "2",
 		uranium: "1"
+	}, {
+		area: "97",
+		obsidian: "100"
+	}, {
+		area: "98",
+		obsidian: "70",
+		diamond: "30"
+	}, {
+		area: "99",
+		obsidian: "50",
+		diamond: "13",
+		iron: "11",
+		sapphire: "10",
+		titaniumOre: "8",
+		coal: "3",
+		platinum: "3",
+		silver: "2",
+		helium3: "1"
+	}, {
+		area: "100",
+		obsidian: "45",
+		diamond: "11",
+		iron: "17",
+		sapphire: "9",
+		titaniumOre: "8",
+		coal: "5",
+		platinum: "2",
+		silver: "3",
+		helium3: "1"
+	}, {
+		area: "101",
+		obsidian: "40",
+		diamond: "10",
+		iron: "22",
+		sapphire: "8",
+		titaniumOre: "7",
+		coal: "7",
+		platinum: "2",
+		silver: "4",
+		helium3: "1"
+	}, {
+		area: "102",
+		obsidian: "35",
+		iron: "27.5",
+		diamond: "8.75",
+		coal: "8.33",
+		sapphire: "7",
+		titaniumOre: "5.83",
+		silver: "5",
+		platinum: "1.75",
+		helium3: "0.83"
+	}, {
+		area: "103",
+		iron: "33",
+		obsidian: "30",
+		coal: "10",
+		diamond: "7.5",
+		silver: "6",
+		sapphire: "6",
+		titaniumOre: "5",
+		platinum: "1.5",
+		helium3: "1"
+	}, {
+		area: "104",
+		iron: "38.5",
+		obsidian: "25",
+		coal: "11.67",
+		silver: "7",
+		diamond: "6.25",
+		sapphire: "5",
+		titaniumOre: "4.17",
+		platinum: "1.25",
+		helium3: "1.17"
+	}, {
+		area: "105",
+		iron: "44",
+		obsidian: "20",
+		coal: "13.33",
+		silver: "8",
+		diamond: "5",
+		sapphire: "4",
+		titaniumOre: "3.33",
+		helium3: "1.33",
+		platinum: "1"
+	}, {
+		area: "106",
+		iron: "49.5",
+		obsidian: "15",
+		coal: "15",
+		silver: "9",
+		diamond: "3.75",
+		sapphire: "3",
+		titaniumOre: "2.5",
+		helium3: "1.5",
+		platinum: "0.75"
+	}, {
+		area: "107",
+		iron: "55",
+		coal: "16.67",
+		silver: "10",
+		obsidian: "10",
+		diamond: "2.5",
+		sapphire: "2",
+		titaniumOre: "1.67",
+		helium3: "1.67",
+		platinum: "0.5"
+	}, {
+		area: "108",
+		iron: "60.5",
+		coal: "18.33",
+		silver: "11",
+		obsidian: "5",
+		helium3: "1.83",
+		diamond: "1.25",
+		sapphire: "1",
+		titaniumOre: "0.83",
+		platinum: "0.25"
+	}, {
+		area: "109",
+		iron: "66",
+		coal: "20",
+		silver: "12",
+		helium3: "2"
+	}, {
+		area: "110",
+		iron: "66.33",
+		coal: "18.33",
+		silver: "11",
+		helium3: "4.33"
+	}, {
+		area: "111",
+		iron: "66.67",
+		coal: "16.67",
+		silver: "10",
+		helium3: "6.67"
+	}, {
+		area: "112",
+		iron: "67",
+		coal: "15",
+		silver: "9",
+		helium3: "9"
+	}, {
+		area: "113",
+		iron: "67.33",
+		coal: "13.33",
+		helium3: "11.33",
+		silver: "8"
+	}, {
+		area: "114",
+		iron: "67.67",
+		helium3: "13.67",
+		coal: "11.67",
+		silver: "7"
+	}, {
+		area: "115",
+		iron: "68",
+		helium3: "16",
+		coal: "10",
+		silver: "6"
+	}, {
+		area: "116",
+		iron: "68.33",
+		helium3: "18.33",
+		coal: "8.33",
+		silver: "5"
+	}, {
+		area: "117",
+		iron: "68.67",
+		helium3: "20.67",
+		coal: "6.67",
+		silver: "4"
+	}, {
+		area: "118",
+		iron: "69",
+		helium3: "23",
+		coal: "5",
+		silver: "3"
+	}, {
+		area: "119",
+		iron: "100"
+	}, {
+		area: "120",
+		iron: "50",
+		coal: "50"
 	}
 ];
