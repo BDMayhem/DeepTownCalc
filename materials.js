@@ -51,16 +51,22 @@ const materials  = [
 		name: "uranium",
 		source: "mining"
 	}, {
+		name: "obsidian",
+		source: "mining"
+	}, {
+		name: "helium3",
+		source: "mining"
+	}, {
 		name: "uraniumRod",
 		source: "enrichment",
-		time: "600",
+		time: "120",
 		toMake: [
 			{
 				thing: "uranium",
-				quantity: "100"
+				quantity: "20"
 			}, {
 				thing: "sodium",
-				quantity: "50"
+				quantity: "10"
 			}
 		]
 	}, {
@@ -70,6 +76,16 @@ const materials  = [
 		toMake: [
 			{
 				thing: "alexandrite",
+				quantity: "5"
+			}
+		]
+	}, {
+		name: "polishedObsidian",
+		source: "jewelCrafting",
+		time: "60",
+		toMake: [
+			{
+				thing: "obsidian",
 				quantity: "5"
 			}
 		]
@@ -311,6 +327,16 @@ const materials  = [
 		toMake: [
 			{
 				thing: "steelBar",
+				quantity: "5"
+			}
+		]
+	}, {
+		name: "magnetiteBar",
+		source: "smelting",
+		time: "60",
+		toMake: [
+			{
+				thing: "magnetiteOre",
 				quantity: "5"
 			}
 		]
@@ -619,6 +645,51 @@ const materials  = [
 			}
 		]
 	}, {
+		name: "magnet",
+		source: "crafting",
+		time: "120",
+		value: "69000",
+		toMake: [
+			{
+				thing: "magnetiteBar",
+				quantity: "1"
+			}
+		]
+	}, {
+		name: "electricalEngine",
+		source: "crafting",
+		time: "600",
+		value: "69000",
+		toMake: [
+			{
+				thing: "insulateWire",
+				quantity: "50"
+			}, {
+				thing: "aluminumBar",
+				quantity: "20"
+			}, {
+				thing: "magnet",
+				quantity: "1"
+			}
+		]
+	}, {
+		name: "lcdMonitor",
+		source: "crafting",
+		time: "600",
+		value: "69000",
+		toMake: [
+			{
+				thing: "insulatedWire",
+				quantity: "20"
+			}, {
+				thing: "silicon",
+				quantity: "5"
+			}, {
+				thing: "sapphireCrystalGlass",
+				quantity: "5"
+			}
+		]
+	}, {
 		name: "silicon",
 		source: "chemicalMining",
 		time: "600",
@@ -632,6 +703,12 @@ const materials  = [
 		value: "100"
 	}, {
 		name: "sodium",
+		source: "chemicalMining",
+		time: "600",
+		batch: "5",
+		value: "100"
+	}, {
+		name: "nitrogen",
 		source: "chemicalMining",
 		time: "600",
 		batch: "5",
@@ -800,6 +877,68 @@ const materials  = [
 			}
 		]
 	}, {
+		name: "liquidNitrogen",
+		source: "chemistry",
+		time: "120",
+		value: "400",
+		toMake: [
+			{
+				thing: "aluminumBottle",
+				quantity: "1"
+			}, {
+				thing: "compressor",
+				quantity: "1"
+			}, {
+				thing: "nitrogen",
+				quantity: "10"
+			}
+		]
+	}, {
+		name: "magnetiteOre",
+		source: "chemistry",
+		time: "360",
+		value: "400",
+		toMake: [
+			{
+				thing: "greenLaser",
+				quantity: "5"
+			}, {
+				thing: "ironBar",
+				quantity: "10"
+			}, {
+				thing: "oxygen",
+				quantity: "5"
+			}
+		]
+	}, {
+		name: "enhancedHelium3",
+		source: "chemistry",
+		time: "1800",
+		value: "400",
+		toMake: [
+			{
+				thing: "aluminumBottle",
+				quantity: "1"
+			}, {
+				thing: "compressor",
+				quantity: "1"
+			}, {
+				thing: "helium3",
+				quantity: "100"
+			}
+		]
+	}, {
+		name: "toxicBomb",
+		source: "chemistry",
+		time: "120",
+		value: "400",
+		toMake: [
+			{
+				thing: "sulfuricAcid",
+				quantity: "10"
+			}
+		]
+	}, {
 		name: "oxygen",
 		source: "hydrogen",
 		value: "800"
@@ -837,6 +976,31 @@ const materials  = [
 			}, {
 				thing: "silverBar",
 				quantity: "1"
+			}
+		]
+	}, {
+		name: "obsidianKnife",
+		source: "jewelCrafting",
+		time: "120",
+		value: "280",
+		toMake: [
+			{
+				thing: "polishedObsidian",
+				quantity: "50"
+			}, {
+				thing: "silverBar",
+				quantity: "1"
+			}
+		]
+	}, {
+		name: "sapphireCrystalGlass",
+		source: "jewelCrafting",
+		time: "120",
+		value: "280",
+		toMake: [
+			{
+				thing: "polishedSapphire",
+				quantity: "10"
 			}
 		]
 	}, {
