@@ -662,7 +662,7 @@ const materials  = [
 		value: "69000",
 		toMake: [
 			{
-				thing: "insulateWire",
+				thing: "insulatedWire",
 				quantity: "50"
 			}, {
 				thing: "aluminumBar",
