@@ -152,7 +152,7 @@ const materials  = [
 		time: "120",
 		toMake: [
 			{
-				thing: "titaniumBar",
+				thing: "steelBar",
 				quantity: "5"
 			}, {
 				thing: "gunpowder",
