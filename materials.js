@@ -331,6 +331,16 @@ const materials  = [
 			}
 		]
 	}, {
+		name: "steelPipe",
+		source: "smelting",
+		time: "60",
+		toMake: [
+			{
+				thing: "steelPlate",
+				quantity: "1"
+			}
+		]
+	}, {
 		name: "magnetiteBar",
 		source: "smelting",
 		time: "60",
